@@ -35,81 +35,72 @@ public class MainController implements Initializable {
 
     @FXML
     private void mostrarNuevaVenta() {
-        // cargarVista("NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
+        cargarVista("NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
     }
 
     @FXML
     private void mostrarConsultarVentas() {
-        // cargarVista("ConsultarVentas.fxml", "consultar-ventas", "Consultar Ventas");
+        cargarVista("ConsultarVentas.fxml", "consultar-ventas", "Consultar Ventas");
     }
 
     @FXML
     private void mostrarHistorialVentas() {
-        // cargarVista("HistorialVentas.fxml", "historial-ventas", "Historial de
-        // Ventas");
+        cargarVista("HistorialVentas.fxml", "historial-ventas", "Historial de Ventas");
     }
 
     // ============== MÉTODOS PARA MENÚ IMPORTAR ==============
 
     @FXML
     private void mostrarImportarProductos() {
-        // cargarVista("ImportarProductos.fxml", "importar-productos", "Importar
-        // Productos");
+        cargarVista("ImportarProductos.fxml", "importar-productos", "Importar Productos");
     }
 
     @FXML
     private void mostrarImportarUsuarios() {
-        // cargarVista("ImportarUsuarios.fxml", "importar-usuarios", "Importar
-        // Usuarios");
+        cargarVista("ImportarUsuarios.fxml", "importar-usuarios", "Importar Usuarios");
     }
 
     @FXML
     private void mostrarImportarClientes() {
-        // cargarVista("ImportarClientes.fxml", "importar-clientes", "Importar
-        // Clientes");
+        cargarVista("ImportarClientes.fxml", "importar-clientes", "Importar Clientes");
     }
 
     // ============== MÉTODOS PARA MENÚ ESTADÍSTICAS ==============
 
     @FXML
     private void mostrarVentasRegistradas() {
-        // cargarVista("VentasRegistradas.fxml", "ventas-registradas", "Ventas
-        // Registradas");
+        cargarVista("VentasRegistradas.fxml", "ventas-registradas", "Ventas Registradas");
     }
 
     @FXML
     private void mostrarProductosMasVendidos() {
-        // cargarVista("ProductosMasVendidos.fxml", "productos-mas-vendidos", "Productos
-        // Más Vendidos");
+        cargarVista("ProductosMasVendidos.fxml", "productos-mas-vendidos", "Productos Más Vendidos");
     }
 
     // ============== MÉTODOS PARA MENÚ CONFIGURACIÓN ==============
 
     @FXML
     private void mostrarPersonalizarInterfaz() {
-        // cargarVista("PersonalizarInterfaz.fxml", "personalizar-interfaz",
-        // "Personalizar Interfaz");
+        cargarVista("PersonalizarInterfaz.fxml", "personalizar-interfaz", "Personalizar Interfaz");
     }
 
     @FXML
     private void mostrarDatosEmpresa() {
-        // cargarVista("DatosEmpresa.fxml", "datos-empresa", "Datos de la Empresa");
+        cargarVista("DatosEmpresa.fxml", "datos-empresa", "Datos de la Empresa");
     }
 
     @FXML
     private void mostrarGestionUsuarios() {
-        // cargarVista("GestionUsuarios.fxml", "gestion-usuarios", "Gestión de
-        // Usuarios");
+        cargarVista("GestionUsuarios.fxml", "gestion-usuarios", "Gestión de Usuarios");
     }
 
     @FXML
     private void mostrarRespaldos() {
-        // cargarVista("Respaldos.fxml", "respaldos", "Respaldos");
+        cargarVista("Respaldos.fxml", "respaldos", "Respaldos");
     }
 
     @FXML
     private void cerrarSesion() {
-
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Cerrar Sesión");
         confirmacion.setHeaderText("¿Está seguro que desea cerrar sesión?");
