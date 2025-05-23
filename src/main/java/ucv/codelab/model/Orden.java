@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.model;
+package ucv.codelab.model;
 
 import java.time.LocalDate;
 

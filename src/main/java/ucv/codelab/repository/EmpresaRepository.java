@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.repository;
+package ucv.codelab.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import ucv.codelab.mcastillocho.model.Empresa;
+import ucv.codelab.model.Empresa;
 
 /**
  * Repositorio para la entidad Empresa

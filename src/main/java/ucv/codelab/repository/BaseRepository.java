@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.repository;
+package ucv.codelab.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

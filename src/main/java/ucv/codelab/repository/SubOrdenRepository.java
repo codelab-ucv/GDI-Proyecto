@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.repository;
+package ucv.codelab.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import ucv.codelab.mcastillocho.model.SubOrden;
+import ucv.codelab.model.SubOrden;
 
 public class SubOrdenRepository extends BaseRepository<SubOrden> {
 

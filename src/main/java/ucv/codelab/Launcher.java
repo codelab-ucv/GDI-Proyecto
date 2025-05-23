@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho;
+package ucv.codelab;
 
 /**
  * Launcher class para evitar problemas de JavaFX con JAR ejecutable

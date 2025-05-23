@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho;
+package ucv.codelab;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ucv.codelab.mcastillocho.util.DatabaseInitializer;
+import ucv.codelab.util.DatabaseInitializer;
 
 public class Main extends Application {
 
@@ -27,7 +27,7 @@ public class Main extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(
-                Main.class.getResource("/ucv/codelab/mcastillocho/view/" + fxml + ".fxml"));
+                Main.class.getResource("/ucv/codelab/view/" + fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.util;
+package ucv.codelab.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class DatabaseInitializer {
 
     // Nombre del archivo SQL
-    private static final String SQL_FILE = "ucv/codelab/mcastillocho/sql/gdi.sql";
+    private static final String SQL_FILE = "ucv/codelab/sql/gdi.sql";
 
     /**
      * Inicializa la base de datos utilizando el archivo SQL de esquema
@@ -41,7 +41,7 @@ public class DatabaseInitializer {
             statement.executeUpdate(sqlScript);
             statement.close();
 
-            System.out.println("Base de datos inicializada correctamente con el esquema definido");
+            System.out.println("Base de datos inicializada correctamente.");
             return true;
 
         } catch (SQLException e) {

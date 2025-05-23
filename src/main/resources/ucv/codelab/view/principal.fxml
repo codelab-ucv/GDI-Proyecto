@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.MainController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" text="Ventas">
+               <items>
+                  <MenuItem fx:id="menuNuevaVenta" mnemonicParsing="false" onAction="#mostrarNuevaVenta" text="Nueva Venta" />
+                  <MenuItem fx:id="menuConsultarVentas" mnemonicParsing="false" onAction="#mostrarConsultarVentas" text="Consultar Ventas" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="menuHistorialVentas" mnemonicParsing="false" onAction="#mostrarHistorialVentas" text="Historial de Ventas" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Importar">
+               <items>
+                  <MenuItem fx:id="menuImportarProductos" mnemonicParsing="false" onAction="#mostrarImportarProductos" text="Productos" />
+                  <MenuItem fx:id="menuImportarUsuarios" mnemonicParsing="false" onAction="#mostrarImportarUsuarios" text="Usuarios" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="menuImportarClientes" mnemonicParsing="false" onAction="#mostrarImportarClientes" text="Clientes" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Estadísticas">
+               <items>
+                  <MenuItem fx:id="menuVentasRegistradas" mnemonicParsing="false" onAction="#mostrarVentasRegistradas" text="Ventas Registradas" />
+                  <MenuItem fx:id="menuProductosMasVendidos" mnemonicParsing="false" onAction="#mostrarProductosMasVendidos" text="Productos Más Vendidos" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Configuración">
+               <items>
+                  <MenuItem fx:id="menuPersonalizar" mnemonicParsing="false" onAction="#mostrarPersonalizarInterfaz" text="Personalizar Interfaz" />
+                  <MenuItem fx:id="menuDatosEmpresa" mnemonicParsing="false" onAction="#mostrarDatosEmpresa" text="Datos de la Empresa" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="menuGestionUsuarios" mnemonicParsing="false" onAction="#mostrarGestionUsuarios" text="Gestión de Usuarios" />
+                  <MenuItem fx:id="menuRespaldos" mnemonicParsing="false" onAction="#mostrarRespaldos" text="Respaldos" />
+                  <SeparatorMenuItem />
+                  <MenuItem fx:id="menuCerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar Sesión" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <StackPane fx:id="contenidoPrincipal" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

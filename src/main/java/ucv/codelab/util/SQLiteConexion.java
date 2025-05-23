@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.util;
+package ucv.codelab.util;
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ public class SQLiteConexion {
 
     // Obtener la ruta a la carpeta Documents del usuario
     private final String userHome = System.getProperty("user.home");
-    private final String documentsPath = userHome + File.separator + "Documents" + File.separator + "Database";
+    private final String documentsPath = userHome + File.separator + "Documents" + File.separator + "database";
     private final String dbName = "gdi.db";
     private final String rutaDB = documentsPath + File.separator + dbName;
 

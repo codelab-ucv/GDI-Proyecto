@@ -1,4 +1,4 @@
-package ucv.codelab.mcastillocho.repository;
+package ucv.codelab.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import ucv.codelab.mcastillocho.model.Orden;
+import ucv.codelab.model.Orden;
 
 public class OrdenRepository extends BaseRepository<Orden> {
 
