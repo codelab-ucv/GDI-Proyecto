@@ -4,10 +4,10 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.MainController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
          <menus>
@@ -48,6 +48,6 @@
       </MenuBar>
    </top>
    <center>
-      <StackPane fx:id="contenidoPrincipal" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="contenidoPrincipal" prefHeight="720.0" prefWidth="1280.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

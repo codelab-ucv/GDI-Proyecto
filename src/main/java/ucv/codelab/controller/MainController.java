@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable {
 
     @FXML
-    private StackPane contenidoPrincipal;
+    private AnchorPane contenidoPrincipal;
 
     // Cache para almacenar las vistas ya cargadas (carga dinámica)
     private Map<String, Node> vistaCache = new HashMap<>();
@@ -154,9 +154,17 @@ public class MainController implements Initializable {
                 System.out.println("Vista " + titulo + " cargada desde cache");
             }
 
-            // Limpiamos el contenido actual y agregamos la nueva vista
+            // Limpiar el contenido actual del AnchorPane
             contenidoPrincipal.getChildren().clear();
+
+            // Agregar la nueva vista
             contenidoPrincipal.getChildren().add(vista);
+
+            // Anclar la vista a todos los lados para que ocupe todo el espacio
+            AnchorPane.setTopAnchor(vista, 0.0);
+            AnchorPane.setBottomAnchor(vista, 0.0);
+            AnchorPane.setLeftAnchor(vista, 0.0);
+            AnchorPane.setRightAnchor(vista, 0.0);
 
             // Si el controlador tiene un método de actualización, lo llamamos
             actualizarVistaSeleccionada(controlador);
