@@ -96,7 +96,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void mostrarRespaldos() {
-        cargarVista("Respaldos.fxml", "respaldos", "Respaldos");
+        // TODO Código para generar un respaldo en la ubicacion indicada
     }
 
     @FXML
