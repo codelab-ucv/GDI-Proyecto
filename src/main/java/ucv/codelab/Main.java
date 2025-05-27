@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import ucv.codelab.util.DatabaseInitializer;
 
@@ -15,11 +16,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("principal"), 1280, 750);
+        scene = new Scene(loadFXML("principal"), 1300, 780);
         stage.setScene(scene);
         stage.setTitle("GDI");
-        stage.setMinWidth(1280);
-        stage.setMinHeight(750);
+        stage.setMinWidth(1300);
+        stage.setMinHeight(780);
+        stage.getIcons().add(new Image("ucv/codelab/img/logo_inicial.png"));
         stage.show();
     }
 

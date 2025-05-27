@@ -15,8 +15,6 @@
                <items>
                   <MenuItem fx:id="menuNuevaVenta" mnemonicParsing="false" onAction="#mostrarNuevaVenta" text="Nueva Venta" />
                   <MenuItem fx:id="menuConsultarVentas" mnemonicParsing="false" onAction="#mostrarConsultarVentas" text="Consultar Ventas" />
-                  <SeparatorMenuItem />
-                  <MenuItem fx:id="menuHistorialVentas" mnemonicParsing="false" onAction="#mostrarHistorialVentas" text="Historial de Ventas" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Importar">

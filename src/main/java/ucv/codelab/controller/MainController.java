@@ -43,11 +43,6 @@ public class MainController implements Initializable {
         cargarVista("ConsultarVentas.fxml", "consultar-ventas", "Consultar Ventas");
     }
 
-    @FXML
-    private void mostrarHistorialVentas() {
-        cargarVista("HistorialVentas.fxml", "historial-ventas", "Historial de Ventas");
-    }
-
     // ============== MÉTODOS PARA MENÚ IMPORTAR ==============
 
     @FXML
