@@ -63,11 +63,6 @@ public class MainController implements Initializable {
     // ============== MÉTODOS PARA MENÚ ESTADÍSTICAS ==============
 
     @FXML
-    private void mostrarVentasRegistradas() {
-        cargarVista("VentasRegistradas.fxml", "ventas-registradas", "Ventas Registradas");
-    }
-
-    @FXML
     private void mostrarProductosMasVendidos() {
         cargarVista("ProductosMasVendidos.fxml", "productos-mas-vendidos", "Productos Más Vendidos");
     }
@@ -111,7 +106,7 @@ public class MainController implements Initializable {
             Stage stageActual = (Stage) contenidoPrincipal.getScene().getWindow();
             stageActual.close();
 
-            // TODO Aquí podrías abrir la ventana de login nuevamente
+            // TODO Añadir cambio a loguin
             // mostrarVentanaLogin();
         }
 

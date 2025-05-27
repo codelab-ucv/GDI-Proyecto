@@ -27,7 +27,6 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Estadísticas">
                <items>
-                  <MenuItem fx:id="menuVentasRegistradas" mnemonicParsing="false" onAction="#mostrarVentasRegistradas" text="Ventas Registradas" />
                   <MenuItem fx:id="menuProductosMasVendidos" mnemonicParsing="false" onAction="#mostrarProductosMasVendidos" text="Productos Más Vendidos" />
                </items>
             </Menu>

@@ -64,11 +64,6 @@
                   <Insets right="10.0" />
                </GridPane.margin>
             </Label>
-            <Button mnemonicParsing="false" text="Seleccionar Logo" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets right="10.0" />
-               </GridPane.margin>
-            </Button>
             <TextField promptText=" Nombre de la empresa" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
@@ -89,6 +84,11 @@
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </TextField>
+            <Button mnemonicParsing="false" text="Seleccionar Logo" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets right="10.0" />
+               </GridPane.margin>
+            </Button>
             <TextField editable="false" promptText="Selecciona la ubicacion del logo" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
