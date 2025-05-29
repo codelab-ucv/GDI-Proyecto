@@ -6,13 +6,13 @@
 
     <groupId>ucv.codelab</groupId>
     <artifactId>gdi</artifactId>
-    <version>1.2.6-SNAPSHOT</version>
+    <version>1.2.7-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javafx.version>17</javafx.version>
+        <javafx.version>21.0.2</javafx.version>
         <sqlite.version>3.41.2.2</sqlite.version>
     </properties>
 

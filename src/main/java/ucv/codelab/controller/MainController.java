@@ -28,60 +28,60 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Mostrar vista de crear nueva venta al iniciar
-        cargarVista("NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
+        cargarVista("ventas/NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
     }
 
     // ============== MÉTODOS PARA MENÚ VENTAS ==============
 
     @FXML
     private void mostrarNuevaVenta() {
-        cargarVista("NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
+        cargarVista("ventas/NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
     }
 
     @FXML
     private void mostrarConsultarVentas() {
-        cargarVista("ConsultarVentas.fxml", "consultar-ventas", "Consultar Ventas");
+        cargarVista("ventas/ConsultarVentas.fxml", "consultar-ventas", "Consultar Ventas");
     }
 
     // ============== MÉTODOS PARA MENÚ IMPORTAR ==============
 
     @FXML
     private void mostrarImportarProductos() {
-        cargarVista("ImportarProductos.fxml", "importar-productos", "Importar Productos");
+        cargarVista("importar/ImportarProductos.fxml", "importar-productos", "Importar Productos");
     }
 
     @FXML
     private void mostrarImportarUsuarios() {
-        cargarVista("ImportarUsuarios.fxml", "importar-usuarios", "Importar Usuarios");
+        cargarVista("importar/ImportarUsuarios.fxml", "importar-usuarios", "Importar Usuarios");
     }
 
     @FXML
     private void mostrarImportarClientes() {
-        cargarVista("ImportarClientes.fxml", "importar-clientes", "Importar Clientes");
+        cargarVista("importar/ImportarClientes.fxml", "importar-clientes", "Importar Clientes");
     }
 
     // ============== MÉTODOS PARA MENÚ ESTADÍSTICAS ==============
 
     @FXML
     private void mostrarProductosMasVendidos() {
-        cargarVista("ProductosMasVendidos.fxml", "productos-mas-vendidos", "Productos Más Vendidos");
+        cargarVista("estadisticas/ProductosMasVendidos.fxml", "productos-mas-vendidos", "Productos Mas Vendidos");
     }
 
     // ============== MÉTODOS PARA MENÚ CONFIGURACIÓN ==============
 
     @FXML
     private void mostrarPersonalizarInterfaz() {
-        cargarVista("PersonalizarInterfaz.fxml", "personalizar-interfaz", "Personalizar Interfaz");
+        cargarVista("configuracion/PersonalizarInterfaz.fxml", "personalizar-interfaz", "Personalizar Interfaz");
     }
 
     @FXML
     private void mostrarDatosEmpresa() {
-        cargarVista("DatosEmpresa.fxml", "datos-empresa", "Datos de la Empresa");
+        cargarVista("configuracion/DatosEmpresa.fxml", "datos-empresa", "Datos de la Empresa");
     }
 
     @FXML
     private void mostrarGestionUsuarios() {
-        cargarVista("GestionUsuarios.fxml", "gestion-usuarios", "Gestión de Usuarios");
+        cargarVista("configuracion/GestionUsuarios.fxml", "gestion-usuarios", "Gestion de Usuarios");
     }
 
     @FXML

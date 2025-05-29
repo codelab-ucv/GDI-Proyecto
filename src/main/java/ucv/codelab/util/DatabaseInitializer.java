@@ -59,7 +59,7 @@ public class DatabaseInitializer {
     private static String loadResourceAsString(String resourceName) {
         try (InputStream is = DatabaseInitializer.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (is == null) {
-                System.err.println("No se encontró el recurso: " + resourceName);
+                System.err.println("No se encontro el recurso: " + resourceName);
                 return null;
             }
 

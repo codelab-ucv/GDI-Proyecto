@@ -62,7 +62,7 @@ public class SQLiteConexion {
             String url = "jdbc:sqlite:" + rutaDB;
             conexion = DriverManager.getConnection(url);
 
-            System.out.println("Conexión establecida con éxito a la base de datos SQLite.");
+            System.out.println("Conexion establecida con exito a la base de datos SQLite.");
             return true;
         } catch (ClassNotFoundException e) {
             System.err.println("Error al cargar el driver SQLite: " + e.getMessage());
@@ -112,9 +112,9 @@ public class SQLiteConexion {
         if (conexion != null) {
             try {
                 conexion.close();
-                System.out.println("Conexión cerrada correctamente.");
+                System.out.println("Conexion cerrada correctamente.");
             } catch (SQLException e) {
-                System.err.println("Error al cerrar la conexión: " + e.getMessage());
+                System.err.println("Error al cerrar la conexion: " + e.getMessage());
             }
         }
     }
