@@ -37,11 +37,17 @@ public class CsvManager {
                 CSVParser parser = new CSVParser(reader, formato)) {
 
             for (CSVRecord record : parser) {
+                // Guarda un mapa por cada fila segun el patron Columna-Valor
                 Map<String, String> fila = new HashMap<>();
 
+                // Para cada columna del archivo
                 for (String columna : parser.getHeaderMap().keySet()) {
                     String valor = record.get(columna);
-                    fila.put(columna, valor != null ? valor : "");
+
+                    // Limpiar BOM del nombre de la columna si existe (problema común de Excel)
+                    String columnaSinBOM = limpiarBOM(columna);
+
+                    fila.put(columnaSinBOM, valor != null ? valor.trim() : "");
                 }
 
                 registros.add(fila);
@@ -71,11 +77,26 @@ public class CsvManager {
         try (FileReader reader = new FileReader(rutaArchivo, StandardCharsets.UTF_8);
                 CSVParser parser = new CSVParser(reader, formato)) {
 
-            return new ArrayList<>(parser.getHeaderMap().keySet());
+            List<String> columnas = new ArrayList<>();
+            for (String columna : parser.getHeaderMap().keySet()) {
+                columnas.add(limpiarBOM(columna));
+            }
+            return columnas;
         } catch (IOException e) {
             System.err.println("Ocurrio un error al leer el archivo CSV: " + e.getMessage());
         }
         // Retorna un ArrayList vacio
         return new ArrayList<>();
+    }
+
+    /**
+     * Limpia el BOM (Byte Order Mark) del inicio de una cadena si existe.
+     * Excel suele agregar BOM al exportar CSV en UTF-8.
+     */
+    private static String limpiarBOM(String texto) {
+        if (texto != null && texto.length() > 0 && texto.charAt(0) == '\uFEFF') {
+            return texto.substring(1);
+        }
+        return texto;
     }
 }

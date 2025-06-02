@@ -4,15 +4,22 @@ import java.util.Map;
 import ucv.codelab.model.Producto;
 
 /**
- * Implementación de CsvReader para la importación de productos desde archivos CSV.
+ * Implementación de CsvReader para la importación de productos desde archivos
+ * CSV.
  * 
- * <p>Este reader procesa archivos CSV que contienen información de productos,
- * validando que tengan nombre y precio válidos antes de crear los objetos Producto.</p>
+ * <p>
+ * Este reader procesa archivos CSV que contienen información de productos,
+ * validando que tengan nombre y precio válidos antes de crear los objetos
+ * Producto.
+ * </p>
  * 
- * <p><strong>Campos requeridos en el CSV:</strong></p>
+ * <p>
+ * <strong>Campos requeridos en el CSV:</strong>
+ * </p>
  * <ul>
- *   <li><strong>nombre</strong> - Nombre del producto (obligatorio)</li>
- *   <li><strong>precio</strong> - Precio del producto como número decimal mayor a 0 (obligatorio)</li>
+ * <li><strong>nombre</strong> - Nombre del producto (obligatorio)</li>
+ * <li><strong>precio</strong> - Precio del producto como número decimal mayor a
+ * 0 (obligatorio)</li>
  * </ul>
  * 
  * @see CsvReader
@@ -23,14 +30,16 @@ public class ProductoReader extends CsvReader<Producto> {
     /**
      * Procesa una fila del CSV y crea un objeto Producto.
      * 
-     * <p>Realiza las siguientes validaciones:</p>
+     * <p>
+     * Realiza las siguientes validaciones:
+     * </p>
      * <ul>
-     *   <li>Nombre y precio no pueden estar vacíos</li>
-     *   <li>Precio debe ser un número válido</li>
-     *   <li>Precio debe ser mayor a 0</li>
+     * <li>Nombre y precio no pueden estar vacíos</li>
+     * <li>Precio debe ser un número válido</li>
+     * <li>Precio debe ser mayor a 0</li>
      * </ul>
      * 
-     * @param fila Mapa con los datos de la fila del CSV
+     * @param fila       Mapa con los datos de la fila del CSV
      * @param numeroFila Número de fila actual para logging
      * @return Producto creado o null si los datos no son válidos
      */

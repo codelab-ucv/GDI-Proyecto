@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.importar.ImpTrabajadoresController">
    <top>
       <Label text="Importar Usuarios" underline="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -34,22 +34,22 @@
             <RowConstraints minHeight="10.0" percentHeight="90.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" text="Seleccionar archivo" GridPane.halignment="RIGHT">
+            <Button fx:id="botonSeleccionarArchivo" mnemonicParsing="false" onAction="#clicSeleccionarArchivo" text="Seleccionar archivo" GridPane.halignment="RIGHT">
                <GridPane.margin>
                   <Insets right="10.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Importar Datos" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+            <Button fx:id="botonImportarDatos" mnemonicParsing="false" onAction="#clicImportarDatos" text="Importar Datos" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
                <GridPane.margin>
                   <Insets right="20.0" />
                </GridPane.margin>
             </Button>
-            <Label text="Ningún archivo seleccionado" GridPane.columnIndex="1" />
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <Label fx:id="textoRutaSeleccionada" text="Ningún archivo seleccionado" GridPane.columnIndex="1" />
+            <TableView fx:id="tablaMuestra" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
               <columns>
-                <TableColumn minWidth="740.0" prefWidth="740.0" text="Nombres y Apellidos" />
-                <TableColumn minWidth="180.0" prefWidth="180.0" text="DNI" />
-                  <TableColumn minWidth="180.0" prefWidth="250.0" text="Puesto" />
+                <TableColumn fx:id="columnaNombre" minWidth="740.0" prefWidth="740.0" text="Nombres y Apellidos" />
+                <TableColumn fx:id="columnaDni" minWidth="180.0" prefWidth="180.0" text="DNI" />
+                  <TableColumn fx:id="columnaPuesto" minWidth="180.0" prefWidth="250.0" text="Puesto" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="25.0" left="20.0" right="20.0" top="10.0" />
