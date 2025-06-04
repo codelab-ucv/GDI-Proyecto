@@ -97,12 +97,30 @@ public class SQLiteConexion {
     }
 
     /**
-     * Método para obtener la conexión directamente
+     * Método para obtener la conexión directamente.
+     * Si la conexión está cerrada o es nula, intenta reconectarse automáticamente.
      * 
      * @return Objeto Connection
+     * @throws SQLException si no se puede establecer o restablecer la conexión
      */
-    public Connection getConexion() {
-        return conexion;
+    public Connection getConexion() throws SQLException {
+        try {
+            // Verificar si la conexión es nula o está cerrada
+            if (conexion == null || conexion.isClosed()) {
+                System.out.println("Conexión cerrada o nula. Intentando reconectar...");
+                if (!conectar()) {
+                    throw new SQLException("No se pudo restablecer la conexión a la base de datos");
+                }
+            }
+            return conexion;
+        } catch (SQLException e) {
+            // Si hay error al verificar el estado, intentar reconectar
+            System.out.println("Error al verificar conexión. Intentando reconectar...");
+            if (!conectar()) {
+                throw new SQLException("No se pudo restablecer la conexión a la base de datos");
+            }
+            return conexion;
+        }
     }
 
     /**

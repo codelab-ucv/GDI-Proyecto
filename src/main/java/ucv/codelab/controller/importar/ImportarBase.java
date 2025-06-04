@@ -3,6 +3,9 @@ package ucv.codelab.controller.importar;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -16,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ucv.codelab.repository.BaseRepository;
+import ucv.codelab.util.SQLiteConexion;
 
 /**
  * Clase base abstracta para controladores de importación de datos desde
@@ -29,16 +34,6 @@ import javafx.stage.Stage;
  * específicos
  * y configurar las columnas de la tabla.
  * </p>
- * 
- * <p>
- * Funcionalidades incluidas:
- * </p>
- * <ul>
- * <li>Selección de archivos CSV mediante FileChooser</li>
- * <li>Carga automática de datos en TableView</li>
- * <li>Manejo de errores de lectura de archivos</li>
- * <li>Habilitación/deshabilitación de botones según el estado</li>
- * </ul>
  * 
  * @param <T> El tipo de objeto que será importado y mostrado en la tabla
  * 
@@ -159,16 +154,7 @@ public abstract class ImportarBase<T> implements Initializable {
 
             System.out.println("Archivo seleccionado: " + archivo.getAbsolutePath());
         } else {
-            // El usuario canceló la selección
-            textoRutaSeleccionada.setText("No se ha seleccionado ningún archivo");
-            botonImportarDatos.setDisable(true);
-
-            // Borra la lista de datos precargados
-            if (listaDatos != null) {
-                listaDatos.clear();
-            }
-            cargarDatosEnTabla();
-            archivoSeleccionado = null;
+            cancelarSeleccion();
         }
     }
 
@@ -183,7 +169,7 @@ public abstract class ImportarBase<T> implements Initializable {
         FileChooser fileChooser = new FileChooser();
 
         // Configurar el título del diálogo
-        fileChooser.setTitle("Seleccionar archivo CSV de productos");
+        fileChooser.setTitle("Seleccionar archivo CSV");
 
         // Permite solo los archivos .csv
         fileChooser.getExtensionFilters().addAll(
@@ -228,9 +214,157 @@ public abstract class ImportarBase<T> implements Initializable {
         }
     }
 
+    /**
+     * Maneja el evento de clic en el botón "Importar datos".
+     * 
+     * <p>
+     * Valida que existan datos cargados, establece conexión con la base de datos
+     * y procede a insertar los datos válidos. Muestra un resumen del proceso
+     * indicando cuántos registros se insertaron exitosamente y cuántos fallaron.
+     * </p>
+     */
     @FXML
-    private void clicImportarDatos() {
+    protected void clicImportarDatos() {
+        if (listaDatos == null || listaDatos.isEmpty()) {
+            mostrarError("Sin datos", "No hay datos para importar. Seleccione un archivo primero.");
+            cancelarSeleccion();
+            return;
+        }
 
+        try (Connection connection = SQLiteConexion.getInstance().getConexion()) {
+            // Inserta los datos de la tabla
+            int insercciones[] = insertarDatos(connection);
+
+            String mensaje = "";
+
+            // Si hay al menos un dato insertado muestra el mensaje positivo
+            if (insercciones[0] > 0) {
+                mensaje += "Se insertaron exitosamente " + insercciones[0] + " datos.\n";
+            }
+            // Si ocurrio un error al mostrar algun dato actualiza el mensaje y la tabla
+            if (insercciones[1] > 0) {
+                mensaje += "Ocurrió un error al insertar " + insercciones[1]
+                        + " datos, verifica que se cumplan con los criterios"
+                        + " indicados y no este previamente ingresado.";
+                cargarDatosEnTabla();
+            } else {
+                // De lo contrario limpia los registros de la tabla y el archivo seleccionado
+                cancelarSeleccion();
+            }
+
+            // Muestra un enunciado con la cantidad de datos insertados
+            mostrarInformacion("Datos importados", mensaje);
+        } catch (SQLException e) {
+            mostrarError("Error de conexión",
+                    "No se pudo conectar a la base de datos.");
+            return;
+        }
+    }
+
+    /**
+     * Procesa la inserción de datos en la base de datos separando la validación
+     * de la inserción efectiva.
+     * 
+     * <p>
+     * Primero valida todos los datos y los separa en válidos e inválidos.
+     * Luego inserta únicamente los datos válidos y actualiza la lista original
+     * con los datos que no pudieron ser procesados.
+     * </p>
+     * 
+     * @param connection La conexión a la base de datos
+     * @return Un arreglo de enteros donde [0] representa los registros insertados
+     *         exitosamente y [1] los registros que fallaron
+     */
+    private int[] insertarDatos(Connection connection) {
+        int[] registroInsertados = { 0, 0 };
+        BaseRepository<T> repository = repositorioBase(connection);
+
+        // Separar validación de inserción
+        List<T> datosValidos = new ArrayList<>();
+        List<T> datosInvalidos = new ArrayList<>();
+
+        for (T dato : listaDatos) {
+            if (validar(repository, dato)) {
+                datosValidos.add(dato);
+            } else {
+                datosInvalidos.add(dato);
+            }
+        }
+
+        // Insertar solo datos válidos
+        for (T dato : datosValidos) {
+            repository.save(dato);
+            registroInsertados[0]++;
+        }
+
+        // Actualizar lista original con datos que no se pudieron insertar
+        listaDatos.clear();
+        listaDatos.addAll(datosInvalidos);
+        registroInsertados[1] = datosInvalidos.size();
+
+        return registroInsertados;
+    }
+
+    /**
+     * Método abstracto que debe ser implementado por las clases hijas para
+     * proporcionar el repositorio específico que manejará la importación.
+     * 
+     * @param connection La conexión a la base de datos
+     * @return El repositorio base configurado para el tipo de datos específico
+     */
+    protected abstract BaseRepository<T> repositorioBase(Connection connection);
+
+    /**
+     * Valida si un dato puede ser insertado en la base de datos.
+     * Las implementaciones deben verificar:
+     * - Duplicados (si aplica)
+     * - Formato de datos
+     * - Restricciones de negocio
+     * 
+     * @param repository Repositorio para consultas de validación
+     * @param dato       Dato a validar
+     * @return true si el dato es válido para inserción, false en caso contrario
+     */
+    protected abstract boolean validar(BaseRepository<T> repository, T dato);
+
+    /**
+     * Cancela la selección actual y restaura el estado inicial del controlador.
+     * 
+     * <p>
+     * Deshabilita el botón de importar, limpia el texto de ruta seleccionada,
+     * borra los datos cargados, reinicia la tabla y elimina la referencia
+     * al archivo seleccionado.
+     * </p>
+     */
+    private void cancelarSeleccion() {
+        // Se deshabilita el boton de importar y se regresa al texto default
+        botonImportarDatos.setDisable(true);
+        textoRutaSeleccionada.setText("No se ha seleccionado ningún archivo");
+
+        // Borra la lista de datos precargados
+        if (listaDatos != null) {
+            listaDatos.clear();
+        }
+
+        // Reinicia los datos de la tabla
+        tablaMuestra.setItems(FXCollections.observableArrayList());
+
+        // Borra de la caches el archivo guardado
+        archivoSeleccionado = null;
+    }
+
+    /**
+     * Muestra un diálogo de información con el título y mensaje especificados.
+     * 
+     * @param titulo  El título del diálogo
+     * @param mensaje El mensaje a mostrar
+     */
+    protected void mostrarInformacion(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     /**
