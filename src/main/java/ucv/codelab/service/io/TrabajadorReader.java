@@ -73,7 +73,6 @@ public class TrabajadorReader extends CsvReader<Trabajador> {
         String puesto = obtenerValor(fila, "puesto");
         String tipoLetra = obtenerValorOpcional(fila, "tipo de letra");
         String colorFondo = obtenerValorOpcional(fila, "color de fondo");
-        String colorBoton = obtenerValorOpcional(fila, "color de boton");
 
         // Validar campos obligatorios
         if (!sonCamposObligatoriosValidos(nombre, dni, puesto)) {
@@ -88,7 +87,7 @@ public class TrabajadorReader extends CsvReader<Trabajador> {
         }
 
         // Crear y retornar el trabajador
-        return new Trabajador(-1, nombre, dni, puesto.toUpperCase(), tipoLetra, colorFondo, colorBoton);
+        return new Trabajador(-1, nombre, dni, puesto.toUpperCase(), tipoLetra, colorFondo);
     }
 
     /**

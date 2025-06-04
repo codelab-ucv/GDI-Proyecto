@@ -13,13 +13,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ucv.codelab.repository.BaseRepository;
+import ucv.codelab.util.PopUp;
 import ucv.codelab.util.SQLiteConexion;
 
 /**
@@ -140,7 +140,7 @@ public abstract class ImportarBase<T> implements Initializable {
                 listaDatos = cargarArchivo(archivoSeleccionado.getAbsolutePath());
             } catch (Exception e) {
                 // Si no se puede leer el archivo retorna e imprime el error en consola
-                mostrarError("Error de lectura", "Ocurrió un error al leer el archivo " + archivo.getName()
+                PopUp.error("Error de lectura", "Ocurrió un error al leer el archivo " + archivo.getName()
                         + "\nVerifique que el archivo seleccionado tenga el formato correcto.");
                 e.printStackTrace();
                 return;
@@ -210,7 +210,7 @@ public abstract class ImportarBase<T> implements Initializable {
         } else {
             // Limpiar la tabla si no hay datos
             tablaMuestra.setItems(FXCollections.observableArrayList());
-            mostrarError("Sin información", "No hay datos válidos para mostrar en el archivo indicado");
+            PopUp.error("Sin información", "No hay datos válidos para mostrar en el archivo indicado");
         }
     }
 
@@ -226,7 +226,7 @@ public abstract class ImportarBase<T> implements Initializable {
     @FXML
     protected void clicImportarDatos() {
         if (listaDatos == null || listaDatos.isEmpty()) {
-            mostrarError("Sin datos", "No hay datos para importar. Seleccione un archivo primero.");
+            PopUp.error("Sin datos", "No hay datos para importar. Seleccione un archivo primero.");
             cancelarSeleccion();
             return;
         }
@@ -253,9 +253,9 @@ public abstract class ImportarBase<T> implements Initializable {
             }
 
             // Muestra un enunciado con la cantidad de datos insertados
-            mostrarInformacion("Datos importados", mensaje);
+            PopUp.informacion("Datos importados", mensaje);
         } catch (SQLException e) {
-            mostrarError("Error de conexión",
+            PopUp.error("Error de conexión",
                     "No se pudo conectar a la base de datos.");
             return;
         }
@@ -351,33 +351,5 @@ public abstract class ImportarBase<T> implements Initializable {
 
         // Borra de la caches el archivo guardado
         archivoSeleccionado = null;
-    }
-
-    /**
-     * Muestra un diálogo de información con el título y mensaje especificados.
-     * 
-     * @param titulo  El título del diálogo
-     * @param mensaje El mensaje a mostrar
-     */
-    protected void mostrarInformacion(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
-        alert.setHeaderText(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
-    /**
-     * Muestra un diálogo de alerta de error con el título y mensaje especificados.
-     * 
-     * @param titulo  El título del diálogo de error
-     * @param mensaje El mensaje detallado del error
-     */
-    protected void mostrarError(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 }

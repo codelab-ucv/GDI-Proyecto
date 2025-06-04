@@ -33,8 +33,7 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
                 rs.getString("dni_trabajador"),
                 rs.getString("puesto"),
                 rs.getString("tipo_letra"),
-                rs.getString("color_fondo"),
-                rs.getString("color_boton"));
+                rs.getString("color_fondo"));
     }
 
     @Override
@@ -44,7 +43,6 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
         stmt.setString(3, trabajador.getPuesto());
         stmt.setString(4, trabajador.getTipoLetra());
         stmt.setString(5, trabajador.getColorFondo());
-        stmt.setString(6, trabajador.getColorBoton());
     }
 
     @Override
@@ -54,21 +52,20 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
         stmt.setString(3, trabajador.getPuesto());
         stmt.setString(4, trabajador.getTipoLetra());
         stmt.setString(5, trabajador.getColorFondo());
-        stmt.setString(6, trabajador.getColorBoton());
-        stmt.setInt(7, trabajador.getIdTrabajador());
+        stmt.setInt(6, trabajador.getIdTrabajador());
     }
 
     @Override
     protected String buildInsertSQL() {
-        return "INSERT INTO trabajador (nombre_trabajador, dni_trabajador, puesto, tipo_letra, color_fondo, color_boton) "
+        return "INSERT INTO trabajador (nombre_trabajador, dni_trabajador, puesto, tipo_letra, color_fondo) "
                 +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String buildUpdateSQL() {
         return "UPDATE trabajador SET nombre_trabajador = ?, dni_trabajador = ?, puesto = ?, " +
-                "tipo_letra = ?, color_fondo = ?, color_boton = ? WHERE id_trabajador = ?";
+                "tipo_letra = ?, color_fondo = ? WHERE id_trabajador = ?";
     }
 
     @Override

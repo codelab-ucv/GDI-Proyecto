@@ -4,10 +4,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import ucv.codelab.util.PopUp;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +29,7 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Mostrar vista de crear nueva venta al iniciar
         cargarVista("ventas/NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
+
     }
 
     // ============== MÉTODOS PARA MENÚ VENTAS ==============
@@ -91,12 +92,10 @@ public class MainController implements Initializable {
 
     @FXML
     private void cerrarSesion() {
-        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmacion.setTitle("Cerrar Sesión");
-        confirmacion.setHeaderText("¿Está seguro que desea cerrar sesión?");
-        confirmacion.setContentText("Se perderán los cambios no guardados.");
+        Optional<ButtonType> resultado = PopUp.confirmacion("Cerrar Sesión",
+                "¿Está seguro que desea cerrar sesión?",
+                "Se perderán los cambios no guardados.");
 
-        Optional<ButtonType> resultado = confirmacion.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
             // Limpiar cache
             vistaCache.clear();
@@ -160,7 +159,7 @@ public class MainController implements Initializable {
             actualizarVistaSeleccionada(controlador);
 
         } catch (IOException e) {
-            mostrarError("Error al cargar la vista: " + titulo, e.getMessage());
+            PopUp.error("Error al cargar la vista: " + titulo, e.getMessage());
             e.printStackTrace();
         }
     }
@@ -221,31 +220,4 @@ public class MainController implements Initializable {
         System.out.println("Cache de vista " + cacheKey + " limpiado");
     }
 
-    /**
-     * Muestra un diálogo de error
-     * 
-     * @param titulo  Título del error
-     * @param mensaje Mensaje del error
-     */
-    private void mostrarError(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
-    /**
-     * Muestra un diálogo informativo
-     * 
-     * @param titulo  Título de la información
-     * @param mensaje Mensaje informativo
-     */
-    public void mostrarInformacion(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Información");
-        alert.setHeaderText(titulo);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
 }

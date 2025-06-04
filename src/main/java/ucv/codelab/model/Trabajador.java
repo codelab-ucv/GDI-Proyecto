@@ -8,17 +8,15 @@ public class Trabajador {
     private String puesto;
     private String tipoLetra;
     private String colorFondo;
-    private String colorBoton;
 
     public Trabajador(int idTrabajador, String nombreTrabajador, String dniTrabajador, String puesto, String tipoLetra,
-            String colorFondo, String colorBoton) {
+            String colorFondo) {
         this.idTrabajador = idTrabajador;
         this.nombreTrabajador = nombreTrabajador;
         this.dniTrabajador = dniTrabajador;
         this.puesto = puesto;
         this.tipoLetra = tipoLetra;
         this.colorFondo = colorFondo;
-        this.colorBoton = colorBoton;
     }
 
     public int getIdTrabajador() {
@@ -67,13 +65,5 @@ public class Trabajador {
 
     public void setColorFondo(String colorFondo) {
         this.colorFondo = colorFondo;
-    }
-
-    public String getColorBoton() {
-        return colorBoton;
-    }
-
-    public void setColorBoton(String colorBoton) {
-        this.colorBoton = colorBoton;
     }
 }
