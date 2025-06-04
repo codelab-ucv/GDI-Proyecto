@@ -1,6 +1,5 @@
 package ucv.codelab.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ucv.codelab.model.Empresa;
+import ucv.codelab.util.SQLiteConexion;
 
 /**
  * Repositorio para la entidad Empresa
@@ -18,9 +18,10 @@ public class EmpresaRepository extends BaseRepository<Empresa> {
      * Constructor
      * 
      * @param connection Conexión a la base de datos
+     * @throws SQLException Si no se puede establecer la conexión
      */
-    public EmpresaRepository(Connection connection) {
-        super(connection);
+    public EmpresaRepository() throws SQLException {
+        super(SQLiteConexion.getInstance().getConexion());
     }
 
     @Override
@@ -102,5 +103,17 @@ public class EmpresaRepository extends BaseRepository<Empresa> {
     public List<Empresa> findByNombre(String nombre) {
         String sql = "SELECT * FROM empresa WHERE nombre_empresa LIKE ?";
         return executeQuery(sql, "%" + nombre + "%");
+    }
+
+    /**
+     * Obtiene la ultima empresa registrada en la base de datos
+     * 
+     * @return Devuelve la ultima empresa registrada, en caso de no encontrarse
+     *         devuelve una empresa por defecto
+     */
+    public Empresa getLastId() {
+        String sql = "SELECT * FROM empresa ORDER BY id_empresa DESC LIMIT 1;";
+        Optional<Empresa> empresa = executeQueryForSingleResult(sql);
+        return empresa.isPresent() ? empresa.get() : new Empresa("GDI", "20123456789");
     }
 }

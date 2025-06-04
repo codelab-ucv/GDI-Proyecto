@@ -1,17 +1,17 @@
 package ucv.codelab.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import ucv.codelab.model.Producto;
+import ucv.codelab.util.SQLiteConexion;
 
 public class ProductoRepository extends BaseRepository<Producto> {
 
-    public ProductoRepository(Connection connection) {
-        super(connection);
+    public ProductoRepository() throws SQLException {
+        super(SQLiteConexion.getInstance().getConexion());
     }
 
     @Override

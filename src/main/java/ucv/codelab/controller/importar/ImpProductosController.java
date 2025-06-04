@@ -1,7 +1,7 @@
 package ucv.codelab.controller.importar;
 
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -36,8 +36,8 @@ public class ImpProductosController extends ImportarBase<Producto> {
     }
 
     @Override
-    protected BaseRepository<Producto> repositorioBase(Connection connection) {
-        return new ProductoRepository(connection);
+    protected BaseRepository<Producto> repositorioBase() throws SQLException {
+        return new ProductoRepository();
     }
 
     @Override

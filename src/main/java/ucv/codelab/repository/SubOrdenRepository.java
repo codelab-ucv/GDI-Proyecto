@@ -1,17 +1,17 @@
 package ucv.codelab.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import ucv.codelab.model.SubOrden;
+import ucv.codelab.util.SQLiteConexion;
 
 public class SubOrdenRepository extends BaseRepository<SubOrden> {
 
-    public SubOrdenRepository(Connection connection) {
-        super(connection);
+    public SubOrdenRepository() throws SQLException {
+        super(SQLiteConexion.getInstance().getConexion());
     }
 
     @Override

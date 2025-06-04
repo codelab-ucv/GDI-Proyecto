@@ -1,6 +1,5 @@
 package ucv.codelab.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,13 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import ucv.codelab.model.Orden;
+import ucv.codelab.util.SQLiteConexion;
 
 public class OrdenRepository extends BaseRepository<Orden> {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 
-    public OrdenRepository(Connection connection) {
-        super(connection);
+    public OrdenRepository() throws SQLException {
+        super(SQLiteConexion.getInstance().getConexion());
     }
 
     @Override

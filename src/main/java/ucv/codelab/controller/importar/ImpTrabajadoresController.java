@@ -1,7 +1,7 @@
 package ucv.codelab.controller.importar;
 
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +40,8 @@ public class ImpTrabajadoresController extends ImportarBase<Trabajador> {
     }
 
     @Override
-    protected BaseRepository<Trabajador> repositorioBase(Connection connection) {
-        return new TrabajadorRepository(connection);
+    protected BaseRepository<Trabajador> repositorioBase() throws SQLException {
+        return new TrabajadorRepository();
     }
 
     @Override

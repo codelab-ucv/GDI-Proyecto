@@ -66,4 +66,9 @@ CREATE TABLE
         UNIQUE ("id_orden", "id_producto")
     );
 
+INSERT INTO
+    "empresa" ("nombre_empresa", "ruc")
+VALUES
+    ("GDI", "20123456789");
+
 COMMIT;

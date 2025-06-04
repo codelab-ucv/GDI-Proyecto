@@ -1,6 +1,5 @@
 package ucv.codelab.repository;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,19 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import ucv.codelab.model.Cliente;
+import ucv.codelab.util.SQLiteConexion;
 
-/**
- * Repositorio para la entidad Cliente
- */
 public class ClienteRepository extends BaseRepository<Cliente> {
 
-    /**
-     * Constructor
-     * 
-     * @param connection Conexión a la base de datos
-     */
-    public ClienteRepository(Connection connection) {
-        super(connection);
+    public ClienteRepository() throws SQLException {
+        super(SQLiteConexion.getInstance().getConexion());
     }
 
     @Override
@@ -79,7 +71,7 @@ public class ClienteRepository extends BaseRepository<Cliente> {
 
     /**
      * Busca un cliente por su DNI
-     *  
+     * 
      * @param dni DNI del cliente a buscar.
      * @return Optional con el cliente encontrado o vacío si no existe.
      */

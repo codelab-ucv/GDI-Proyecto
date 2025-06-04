@@ -3,7 +3,6 @@ package ucv.codelab.controller.importar;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ucv.codelab.repository.BaseRepository;
 import ucv.codelab.util.PopUp;
-import ucv.codelab.util.SQLiteConexion;
 
 /**
  * Clase base abstracta para controladores de importación de datos desde
@@ -231,9 +229,9 @@ public abstract class ImportarBase<T> implements Initializable {
             return;
         }
 
-        try (Connection connection = SQLiteConexion.getInstance().getConexion()) {
+        try {
             // Inserta los datos de la tabla
-            int insercciones[] = insertarDatos(connection);
+            int insercciones[] = insertarDatos();
 
             String mensaje = "";
 
@@ -275,9 +273,9 @@ public abstract class ImportarBase<T> implements Initializable {
      * @return Un arreglo de enteros donde [0] representa los registros insertados
      *         exitosamente y [1] los registros que fallaron
      */
-    private int[] insertarDatos(Connection connection) {
+    private int[] insertarDatos() throws SQLException {
         int[] registroInsertados = { 0, 0 };
-        BaseRepository<T> repository = repositorioBase(connection);
+        BaseRepository<T> repository = repositorioBase();
 
         // Separar validación de inserción
         List<T> datosValidos = new ArrayList<>();
@@ -312,7 +310,7 @@ public abstract class ImportarBase<T> implements Initializable {
      * @param connection La conexión a la base de datos
      * @return El repositorio base configurado para el tipo de datos específico
      */
-    protected abstract BaseRepository<T> repositorioBase(Connection connection);
+    protected abstract BaseRepository<T> repositorioBase() throws SQLException;
 
     /**
      * Valida si un dato puede ser insertado en la base de datos.

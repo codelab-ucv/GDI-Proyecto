@@ -9,6 +9,10 @@ public class Empresa {
     private String ubicacion;
     private String logo;
 
+    public Empresa(String nombreEmpresa, String ruc) {
+        new Empresa(-1, nombreEmpresa, ruc, null, null, null);
+    }
+
     public Empresa(int idEmpresa, String nombreEmpresa, String ruc, String emailEmpresa, String ubicacion,
             String logo) {
         this.idEmpresa = idEmpresa;
