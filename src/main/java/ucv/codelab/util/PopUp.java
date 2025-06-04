@@ -44,18 +44,20 @@ public class PopUp {
         alert.setHeaderText(header);
         alert.setContentText(content);
 
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+
+        stage.getScene().getRoot().setStyle(Personalizacion.TIPO_LETRA_ORIGINAL
+                + Personalizacion.COLOR_FONDO_ORIGINAL);
+
         // Intenta usar el icono seleccionado por el usuario
         try {
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(Personalizacion.LOGO_EMPRESA_PERSONALIZADO));
         }
         // Si ocurre un problema usa el logo original e informa por cmd
         catch (Exception e) {
             System.err.println("Error al cargar el ícono: " + e.getMessage()
                     + "\nSe usaran datos por defecto");
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image(Personalizacion.LOGO_EMPRESA_ORIGINAL));
         }
-
     }
 }
