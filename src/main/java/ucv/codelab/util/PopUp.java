@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class PopUp {
@@ -51,13 +50,13 @@ public class PopUp {
 
         // Intenta usar el icono seleccionado por el usuario
         try {
-            stage.getIcons().add(new Image(Personalizacion.LOGO_EMPRESA_PERSONALIZADO));
+            stage.getIcons().add(Personalizacion.getLogo());
         }
         // Si ocurre un problema usa el logo original e informa por cmd
         catch (Exception e) {
             System.err.println("Error al cargar el ícono: " + e.getMessage()
                     + "\nSe usaran datos por defecto");
-            stage.getIcons().add(new Image(Personalizacion.LOGO_EMPRESA_ORIGINAL));
+            stage.getIcons().add(Personalizacion.getLogo());
         }
     }
 }

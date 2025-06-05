@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,21 +39,11 @@ public class EmpresaController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Se actualiza la imagen según el logo indicado
-        refrescarLogo();
+        imagenLogo.setImage(Personalizacion.getLogo());
+
+        // Se actualiza los recuadros de texto
 
         // TODO EDITAR PARA QUE USE EL PERSONALIZADO
-    }
-
-    private void refrescarLogo() {
-        Image image;
-        try {
-            image = new Image(Personalizacion.LOGO_EMPRESA_PERSONALIZADO);
-        } catch (Exception e) {
-            System.err.println("Error al cargar el logo personalizado: " + e.getMessage()
-                    + "\nSe usaran datos por defecto");
-            image = new Image(Personalizacion.LOGO_EMPRESA_ORIGINAL);
-        }
-        imagenLogo.setImage(image);
     }
 
     private File selectorArchivo() {
@@ -89,21 +78,20 @@ public class EmpresaController implements Initializable {
         // Si el logo indicado es nulo no hace cambios en el logo mostrado
         if (imagen == null) {
             // Si no se selecciono ningun archivo intentara usar el logo personalizado
-            if (Personalizacion.LOGO_EMPRESA_PERSONALIZADO.isEmpty()) {
+            if (Personalizacion.getEmpresaActual().getLogo() == null
+                    || Personalizacion.getEmpresaActual().getLogo().isEmpty()) {
                 campoLogo.setText("Selecciona la ubicacion del logo");
             } else {
-                campoLogo.setText(Personalizacion.LOGO_EMPRESA_PERSONALIZADO);
+                campoLogo.setText(Personalizacion.getEmpresaActual().getLogo());
             }
             return;
         }
 
         // Si es un archivo válido actualiza temporalmente la imagen
-        String uri = imagen.toURI().toString();
-
         campoLogo.setText(imagen.getAbsolutePath());
-        Personalizacion.LOGO_EMPRESA_PERSONALIZADO = uri;
+        Personalizacion.getEmpresaActual().setLogo(imagen.getAbsolutePath());
 
         // Actualiza el logo mostrado
-        refrescarLogo();
+        imagenLogo.setImage(Personalizacion.getLogo());
     }
 }
