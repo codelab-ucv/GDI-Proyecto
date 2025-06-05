@@ -116,4 +116,17 @@ public class EmpresaRepository extends BaseRepository<Empresa> {
         Optional<Empresa> empresa = executeQueryForSingleResult(sql);
         return empresa.isPresent() ? empresa.get() : new Empresa("GDI", "20123456789");
     }
+
+    /**
+     * Confirma si una empresa se encuentra previamente registrada en la base de
+     * datos segun su Nombre y RUC
+     * 
+     * @param nombre nombre de la empresa que se intenta subir
+     * @param ruc    ruc de la empresa que se intenta subir
+     * @return Optional de la empresa encontrada o vacío si no existe
+     */
+    public Optional<Empresa> empresaExiste(String nombre, String ruc) {
+        String sql = "SELECT * FROM empresa WHERE nombre_empresa = ? AND ruc = ?";
+        return executeQueryForSingleResult(sql, nombre, ruc);
+    }
 }
