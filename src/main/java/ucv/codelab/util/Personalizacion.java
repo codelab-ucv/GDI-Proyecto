@@ -17,6 +17,12 @@ public class Personalizacion {
     private static final String TIPO_LETRA_ORIGINAL = "-fx-font-family: 'System'; -fx-font-size: 12px;";
     public static final String COLOR_FONDO_ORIGINAL = "-fx-background: #f4f4f4";
 
+    /**
+     * Obtiene la empresa actualmente guardada en la base de datos
+     * 
+     * @return Entidad de la Empresa actual, retornará datos por default en caso se
+     *         presente un error
+     */
     public static Empresa getEmpresaActual() {
         if (empresaActual == null) {
             try {

@@ -4,9 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import ucv.codelab.Main;
+import ucv.codelab.util.Personalizacion;
 import ucv.codelab.util.PopUp;
 
 import java.io.IOException;
@@ -101,14 +105,21 @@ public class MainController implements Initializable {
             vistaCache.clear();
             controladorCache.clear();
 
-            // Cerrar ventana actual y mostrar login
+            // Borra el usuario actual
+            Personalizacion.setTrabajadorActual(null);
+
+            // Cierra la ventana actual
             Stage stageActual = (Stage) contenidoPrincipal.getScene().getWindow();
             stageActual.close();
 
-            // TODO Añadir cambio a loguin
-            // mostrarVentanaLogin();
+            // Muestra la ventana del loguin
+            try {
+                mostrarVentanaLogin();
+            } catch (IOException exception) {
+                PopUp.error("Error al cargar ventanas",
+                        "Error crítico al cargar el menu, vuelva a intentarlo o contacte un administrador");
+            }
         }
-
     }
 
     // ============== MÉTODOS AUXILIARES ==============
@@ -188,6 +199,30 @@ public class MainController implements Initializable {
         } catch (Exception e) {
             // No todos los controladores tendrán este método, ignorar
         }
+    }
+
+    private void mostrarVentanaLogin() throws IOException {
+
+        // Crea la ventana del loguin
+        Stage stage = new Stage();
+        Scene scene = new Scene(loadFXML("Login"), 400, 560);
+
+        // Usa los estilos base del programa
+        scene.getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getColorFondo());
+
+        // Establece el stage actual
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.getIcons().add(Personalizacion.getLogo());
+        stage.setTitle(Personalizacion.getEmpresaActual().getNombreEmpresa());
+        stage.show();
+    }
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(
+                Main.class.getResource("/ucv/codelab/view/" + fxml + ".fxml"));
+        return fxmlLoader.load();
     }
 
     /**

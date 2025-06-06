@@ -31,7 +31,6 @@ CREATE TABLE
         "puesto" TEXT NOT NULL,
         "tipo_letra" TEXT,
         "color_fondo" TEXT,
-        "color_boton" TEXT,
         "password" TEXT NOT NULL DEFAULT "password"
     );
 

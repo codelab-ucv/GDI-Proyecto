@@ -15,17 +15,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("principal"), 1300, 780);
+        scene = new Scene(loadFXML("Login"), 400, 560);
 
         // Usa los estilos base del programa
         scene.getRoot().setStyle(Personalizacion.getTipoLetra()
                 + Personalizacion.getColorFondo());
 
+        // Establece el stage actual
         stage.setScene(scene);
-        stage.setTitle("GDI");
-        stage.setMinWidth(1300);
-        stage.setMinHeight(780);
+
+        // Actualiza los datos
+        stage.setResizable(false);
         stage.getIcons().add(Personalizacion.getLogo());
+        stage.setTitle(Personalizacion.getEmpresaActual().getNombreEmpresa());
         stage.show();
     }
 

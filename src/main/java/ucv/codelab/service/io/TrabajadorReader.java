@@ -86,8 +86,8 @@ public class TrabajadorReader extends CsvReader<Trabajador> {
             return null;
         }
 
-        // Crear y retornar el trabajador
-        return new Trabajador(-1, nombre, dni, puesto.toUpperCase(), tipoLetra, colorFondo);
+        // Crear y retornar el trabajador, la contraseña se establece como password
+        return new Trabajador(-1, nombre, dni, puesto.toUpperCase(), tipoLetra, colorFondo, "password");
     }
 
     /**

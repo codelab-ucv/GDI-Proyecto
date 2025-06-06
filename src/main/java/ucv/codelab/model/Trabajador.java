@@ -11,13 +11,14 @@ public class Trabajador {
     private transient String password;
 
     public Trabajador(int idTrabajador, String nombreTrabajador, String dniTrabajador, String puesto, String tipoLetra,
-            String colorFondo) {
+            String colorFondo, String password) {
         this.idTrabajador = idTrabajador;
         this.nombreTrabajador = nombreTrabajador;
         this.dniTrabajador = dniTrabajador;
         this.puesto = puesto;
         this.tipoLetra = tipoLetra;
         this.colorFondo = colorFondo;
+        this.password = password;
     }
 
     public int getIdTrabajador() {

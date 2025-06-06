@@ -33,7 +33,8 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
                 rs.getString("dni_trabajador"),
                 rs.getString("puesto"),
                 rs.getString("tipo_letra"),
-                rs.getString("color_fondo"));
+                rs.getString("color_fondo"),
+                rs.getString("password"));
     }
 
     @Override
@@ -43,6 +44,7 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
         stmt.setString(3, trabajador.getPuesto());
         stmt.setString(4, trabajador.getTipoLetra());
         stmt.setString(5, trabajador.getColorFondo());
+        stmt.setString(6, trabajador.getPassword());
     }
 
     @Override
@@ -58,9 +60,9 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
 
     @Override
     protected String buildInsertSQL() {
-        return "INSERT INTO trabajador (nombre_trabajador, dni_trabajador, puesto, tipo_letra, color_fondo) "
+        return "INSERT INTO trabajador (nombre_trabajador, dni_trabajador, puesto, tipo_letra, color_fondo, password) "
                 +
-                "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?)";
     }
 
     @Override
@@ -104,7 +106,7 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
      * @return {@code true} si no hay trabajadores con puesto "JEFE", {@code false}
      *         si existe al menos uno.
      */
-    public boolean isEmpty() {
+    public boolean sinJefe() {
         String sql = "SELECT * FROM trabajador WHERE puesto = ? LIMIT 1";
         return executeQueryForSingleResult(sql, "JEFE").isEmpty();
     }
