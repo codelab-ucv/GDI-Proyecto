@@ -185,6 +185,7 @@ public class LoginController implements Initializable {
 
         // Usa los estilos base del programa
         scene.getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getTamanoLetra()
                 + Personalizacion.getColorFondo());
 
         stage.setScene(scene);

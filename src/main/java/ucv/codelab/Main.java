@@ -19,6 +19,7 @@ public class Main extends Application {
 
         // Usa los estilos base del programa
         scene.getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getTamanoLetra()
                 + Personalizacion.getColorFondo());
 
         // Establece el stage actual

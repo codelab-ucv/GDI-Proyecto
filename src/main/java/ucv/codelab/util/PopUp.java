@@ -25,6 +25,7 @@ public class PopUp {
         // Configura el tipo de letra
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getScene().getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getTamanoLetra()
                 + Personalizacion.getColorFondo());
 
         // Intenta usar el icono seleccionado por el usuario
@@ -77,6 +78,7 @@ public class PopUp {
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 
         stage.getScene().getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getTamanoLetra()
                 + Personalizacion.getColorFondo());
 
         // Intenta usar el icono seleccionado por el usuario

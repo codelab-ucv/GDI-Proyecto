@@ -26,8 +26,8 @@ public class MainController implements Initializable {
     private AnchorPane contenidoPrincipal;
 
     // Cache para almacenar las vistas ya cargadas (carga dinámica)
-    private Map<String, Node> vistaCache = new HashMap<>();
-    private Map<String, Object> controladorCache = new HashMap<>();
+    private static Map<String, Node> vistaCache = new HashMap<>();
+    private static Map<String, Object> controladorCache = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -209,6 +209,7 @@ public class MainController implements Initializable {
 
         // Usa los estilos base del programa
         scene.getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getTamanoLetra()
                 + Personalizacion.getColorFondo());
 
         // Establece el stage actual
@@ -238,7 +239,7 @@ public class MainController implements Initializable {
     /**
      * Limpia el cache de vistas (útil para refrescar datos)
      */
-    public void limpiarCache() {
+    public static void limpiarCache() {
         vistaCache.clear();
         controladorCache.clear();
         System.out.println("Cache de vistas limpiado");
@@ -249,10 +250,9 @@ public class MainController implements Initializable {
      * 
      * @param cacheKey Clave de la vista a limpiar
      */
-    public void limpiarCacheVista(String cacheKey) {
+    public static void limpiarCacheVista(String cacheKey) {
         vistaCache.remove(cacheKey);
         controladorCache.remove(cacheKey);
         System.out.println("Cache de vista " + cacheKey + " limpiado");
     }
-
 }

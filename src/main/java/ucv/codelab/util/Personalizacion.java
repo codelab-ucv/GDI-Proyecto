@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.SQLException;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import ucv.codelab.model.Empresa;
 import ucv.codelab.model.Trabajador;
 import ucv.codelab.repository.EmpresaRepository;
@@ -14,8 +15,9 @@ public class Personalizacion {
     private static final String LOGO_EMPRESA_ORIGINAL = "ucv/codelab/img/logo_inicial.png";
 
     private static Trabajador trabajadorActual;
-    private static final String TIPO_LETRA_ORIGINAL = "-fx-font-family: 'System'; -fx-font-size: 12px;";
-    public static final String COLOR_FONDO_ORIGINAL = "-fx-background: #f4f4f4";
+    private static final String TIPO_LETRA_ORIGINAL = "-fx-font-family: 'System';";
+    private static final String TAMANO_LETRA_ORIGINAL = "-fx-font-size: 12px;";
+    public static final String COLOR_FONDO_ORIGINAL = "-fx-background: #f4f4f4;";
 
     /**
      * Obtiene la empresa actualmente guardada en la base de datos
@@ -64,23 +66,68 @@ public class Personalizacion {
         Personalizacion.trabajadorActual = trabajadorActual;
     }
 
-    public static String getTipoLetra() {
-        // Si no se ha iniciado la variable o no hay tipo de letra establecido
-        if (trabajadorActual == null || trabajadorActual.getTipoLetra() == null
-                || trabajadorActual.getTipoLetra().isEmpty()) {
-            return TIPO_LETRA_ORIGINAL;
-        }
-        // No se hace más validaciones ya que solo se puede cambiar la fuente segun las
-        // opciones colocadas
-        return trabajadorActual.getTipoLetra();
-    }
-
     public static String getColorFondo() {
         // Si no se ha iniciado la variable o no hay color de fondo establecido
         if (trabajadorActual == null || trabajadorActual.getColorFondo() == null
                 || trabajadorActual.getColorFondo().isEmpty()) {
             return COLOR_FONDO_ORIGINAL;
         }
-        return "-fx-background: " + trabajadorActual.getColorFondo();
+        return "-fx-background: " + trabajadorActual.getColorFondo() + ";";
+    }
+
+    public static String getTipoLetra() {
+        // Si no se ha iniciado la variable o no hay tipo de letra establecido
+        if (trabajadorActual == null || trabajadorActual.getTipoLetra() == null
+                || trabajadorActual.getTipoLetra().isEmpty()) {
+            return TIPO_LETRA_ORIGINAL;
+        }
+        // Separa la cadena de texto del patron tipo/tamaño
+        String[] tipoLetra = trabajadorActual.getTipoLetra().split("/");
+        // No se hace más validaciones ya que solo se puede cambiar la fuente segun las
+        // opciones colocadas
+        return "-fx-font-family: '" + tipoLetra[0] + "';";
+    }
+
+    public static String getTamanoLetra() {
+        // Si no se ha iniciado la variable o no hay tamaño de letra establecido
+        if (trabajadorActual == null || trabajadorActual.getTipoLetra() == null
+                || trabajadorActual.getTipoLetra().isEmpty()) {
+            return TAMANO_LETRA_ORIGINAL;
+        }
+        // Separa la cadena de texto del patron tipo/tamaño
+        String[] tamanoLetra = trabajadorActual.getTipoLetra().split("/");
+        // No hace mas validaciones ya que siempre se actualiza desde la interfaz
+        return "-fx-font-size: " + tamanoLetra[1] + "px;";
+    }
+
+    public static String getFuente() {
+        if (trabajadorActual == null || trabajadorActual.getTipoLetra() == null
+                || trabajadorActual.getTipoLetra().isEmpty()) {
+            return "System"; // Fuente por defecto
+        }
+        // Separa la cadena de texto del patron tipo/tamaño
+        String[] tamanoLetra = trabajadorActual.getTipoLetra().split("/");
+        // Devuelve la fuente
+        return tamanoLetra[0];
+    }
+
+    public static int getTamano() {
+        if (trabajadorActual == null || trabajadorActual.getTipoLetra() == null
+                || trabajadorActual.getTipoLetra().isEmpty()) {
+            return 12; // Tamaño de letra por defecto
+        }
+        // Separa la cadena de texto del patron tipo/tamaño
+        String[] tamanoLetra = trabajadorActual.getTipoLetra().split("/");
+        // Parsea el tamaño a Integer
+        return Integer.parseInt(tamanoLetra[1]);
+    }
+
+    public static Color getColor() {
+        // Si no se ha iniciado la variable o no hay color de fondo establecido
+        if (trabajadorActual == null || trabajadorActual.getColorFondo() == null
+                || trabajadorActual.getColorFondo().isEmpty()) {
+            return Color.web("#f4f4f4");
+        }
+        return Color.web(trabajadorActual.getColorFondo());
     }
 }
