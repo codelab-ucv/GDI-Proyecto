@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ucv.codelab.Main;
 import ucv.codelab.model.Trabajador;
@@ -40,6 +41,13 @@ public class LoginController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         titulo.setText(Personalizacion.getEmpresaActual().getNombreEmpresa());
         logo.setImage(Personalizacion.getLogo());
+
+        // Al presionar Enter intentar loguear
+        password.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                clicIngresar();
+            }
+        });
     }
 
     @FXML
