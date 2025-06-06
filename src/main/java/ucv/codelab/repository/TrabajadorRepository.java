@@ -52,7 +52,8 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
         stmt.setString(3, trabajador.getPuesto());
         stmt.setString(4, trabajador.getTipoLetra());
         stmt.setString(5, trabajador.getColorFondo());
-        stmt.setInt(6, trabajador.getIdTrabajador());
+        stmt.setString(6, trabajador.getPassword());
+        stmt.setInt(7, trabajador.getIdTrabajador());
     }
 
     @Override
@@ -65,7 +66,7 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
     @Override
     protected String buildUpdateSQL() {
         return "UPDATE trabajador SET nombre_trabajador = ?, dni_trabajador = ?, puesto = ?, " +
-                "tipo_letra = ?, color_fondo = ? WHERE id_trabajador = ?";
+                "tipo_letra = ?, color_fondo = ?, password = ? WHERE id_trabajador = ?";
     }
 
     @Override
@@ -94,5 +95,30 @@ public class TrabajadorRepository extends BaseRepository<Trabajador> {
     public List<Trabajador> findByNombre(String nombre) {
         String sql = "SELECT * FROM trabajador WHERE nombre_trabajador LIKE ?";
         return executeQuery(sql, "%" + nombre + "%");
+    }
+
+    /**
+     * Verifica si no existe ningún trabajador con el puesto "JEFE" en la base de
+     * datos.
+     * 
+     * @return {@code true} si no hay trabajadores con puesto "JEFE", {@code false}
+     *         si existe al menos uno.
+     */
+    public boolean isEmpty() {
+        String sql = "SELECT * FROM trabajador WHERE puesto = ? LIMIT 1";
+        return executeQueryForSingleResult(sql, "JEFE").isEmpty();
+    }
+
+    /**
+     * Realiza la autenticación de un trabajador mediante su DNI y contraseña.
+     * 
+     * @param user     DNI del trabajador (usado como nombre de usuario).
+     * @param password Contraseña del trabajador.
+     * @return Un Optional con el Trabajador si las credenciales son válidas o vacío
+     *         si no se encuentra coincidencia.
+     */
+    public Optional<Trabajador> login(String user, String password) {
+        String sql = "SELECT * FROM trabajador WHERE dni_trabajador = ? AND password = ?";
+        return executeQueryForSingleResult(sql, user, password);
     }
 }

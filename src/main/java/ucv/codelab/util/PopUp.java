@@ -45,8 +45,8 @@ public class PopUp {
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 
-        stage.getScene().getRoot().setStyle(Personalizacion.TIPO_LETRA_ORIGINAL
-                + Personalizacion.COLOR_FONDO_ORIGINAL);
+        stage.getScene().getRoot().setStyle(Personalizacion.getTipoLetra()
+                + Personalizacion.getColorFondo());
 
         // Intenta usar el icono seleccionado por el usuario
         try {

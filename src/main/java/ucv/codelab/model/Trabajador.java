@@ -8,6 +8,7 @@ public class Trabajador {
     private String puesto;
     private String tipoLetra;
     private String colorFondo;
+    private transient String password;
 
     public Trabajador(int idTrabajador, String nombreTrabajador, String dniTrabajador, String puesto, String tipoLetra,
             String colorFondo) {
@@ -65,5 +66,13 @@ public class Trabajador {
 
     public void setColorFondo(String colorFondo) {
         this.colorFondo = colorFondo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

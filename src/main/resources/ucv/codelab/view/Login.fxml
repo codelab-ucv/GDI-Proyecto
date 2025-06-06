@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox alignment="TOP_CENTER" prefHeight="560.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.LoginController">
+   <children>
+      <Label fx:id="titulo" alignment="TOP_LEFT" text="GDI" underline="true">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </VBox.margin>
+      </Label>
+      <ImageView fx:id="logo" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </ImageView>
+      <TextField fx:id="usuario" promptText="Ingrese su DNI">
+         <font>
+            <Font size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </TextField>
+      <PasswordField fx:id="password" promptText="Ingrese su contraseña">
+         <font>
+            <Font size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </PasswordField>
+      <Button mnemonicParsing="false" onAction="#clicIngresar" text="Iniciar Sesion">
+         <font>
+            <Font size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+</VBox>

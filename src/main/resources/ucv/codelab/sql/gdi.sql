@@ -31,7 +31,8 @@ CREATE TABLE
         "puesto" TEXT NOT NULL,
         "tipo_letra" TEXT,
         "color_fondo" TEXT,
-        "color_boton" TEXT
+        "color_boton" TEXT,
+        "password" TEXT NOT NULL DEFAULT "password"
     );
 
 CREATE TABLE
@@ -66,8 +67,8 @@ CREATE TABLE
         UNIQUE ("id_orden", "id_producto")
     );
 
-INSERT OR IGNORE INTO
-    "empresa" ("nombre_empresa", "ruc")
+INSERT
+OR IGNORE INTO "empresa" ("nombre_empresa", "ruc")
 VALUES
     ("GDI", "20123456789");
 
