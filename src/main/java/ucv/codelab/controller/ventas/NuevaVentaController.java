@@ -3,6 +3,7 @@ package ucv.codelab.controller.ventas;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -26,10 +28,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import ucv.codelab.model.Cliente;
+import ucv.codelab.model.Orden;
 import ucv.codelab.model.Producto;
 import ucv.codelab.model.SubOrden;
 import ucv.codelab.repository.ClienteRepository;
+import ucv.codelab.repository.OrdenRepository;
 import ucv.codelab.repository.ProductoRepository;
+import ucv.codelab.repository.SubOrdenRepository;
+import ucv.codelab.util.Personalizacion;
 import ucv.codelab.util.PopUp;
 
 public class NuevaVentaController implements Initializable {
@@ -95,12 +101,6 @@ public class NuevaVentaController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Al iniciar deshabilita los recuadros que no deben ser editados
-        // Los datos del cliente ya estan siempre deshabilitados por defecto
-        deshabilitarBusqueda(true);
-        deshabilitarAnadir(true);
-        deshabilitarComprar(true);
-
         // Al presionar Enter en el DNI intenta buscar el cliente
         dniCliente.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -144,6 +144,9 @@ public class NuevaVentaController implements Initializable {
 
         // Configura las columnas del resultado
         configurarColumnas();
+
+        // Deshabilita los recuadros y coloca los valores iniciales
+        restablecerTodo();
     }
 
     @FXML
@@ -193,7 +196,7 @@ public class NuevaVentaController implements Initializable {
             // Carga los datos a mostrar en la lista producto
             ObservableList<Producto> coincidencias;
             // Si el ID del producto es diferente a un valor vacío intenta buscarlo por ID
-            if (idProducto.getText() != "") {
+            if (!idProducto.getText().equals("")) {
                 // En caso de errores al parsear el ID no hace cambios
                 Optional<Producto> p = repository.findByIdVigentes(Integer.parseInt(idProducto.getText()));
 
@@ -206,7 +209,7 @@ public class NuevaVentaController implements Initializable {
                 }
             }
             // Si el nombre del producto es diferente a un valor vacio
-            else if (nombreProducto.getText() != "") {
+            else if (!nombreProducto.getText().equals("")) {
                 coincidencias = FXCollections
                         .observableArrayList(repository.findByNombreVigentes(nombreProducto.getText()));
             }
@@ -248,7 +251,7 @@ public class NuevaVentaController implements Initializable {
             ObservableList<SubOrden> datosObservables = FXCollections.observableArrayList(listaSubordenes);
             resultado.setItems(datosObservables);
 
-            // Actualiza los datos mostrados
+            // Obtiene los montos totales mostrados de cada SubOrden
             List<String> valores = resultado.getItems().stream().map(item -> columnaTotal.getCellData(item))
                     .collect(Collectors.toList());
 
@@ -258,6 +261,47 @@ public class NuevaVentaController implements Initializable {
             }
 
             precio.setText("S/ " + new DecimalFormat("#0.00").format(total));
+
+            if (listaSubordenes.size() > 0) {
+                deshabilitarComprar(false);
+            } else {
+                deshabilitarComprar(true);
+            }
+        }
+    }
+
+    @FXML
+    private void confirmarCompra() {
+        Optional<ButtonType> confirmacion = PopUp.confirmacion("Confirmar compra",
+                "¿Desea continuar con la compra?",
+                "Una vez enviado no se puede modificar, verifique los productos comprados");
+        if (confirmacion.isPresent() && confirmacion.get() == ButtonType.OK) {
+            try {
+                // Inicia los repositorios
+                OrdenRepository ordenRepository = new OrdenRepository();
+                SubOrdenRepository subOrdenRepository = new SubOrdenRepository();
+
+                // Guarda la orden actual
+                Orden ordenActual = new Orden(-1,
+                        Personalizacion.getTrabajadorActual().getIdTrabajador(),
+                        clienteSeleccionado.getIdCliente(),
+                        Personalizacion.getEmpresaActual().getIdEmpresa(),
+                        LocalDate.now());
+                ordenRepository.save(ordenActual);
+
+                // Guarda todas las SubOrdenes
+                for (SubOrden subOrden : listaSubordenes) {
+                    subOrden.setIdOrden(ordenActual.getIdOrden());
+                    subOrdenRepository.save(subOrden);
+                }
+
+                PopUp.informacion("Gracias por su compra", "Registro de venta realizado");
+
+                // Restablece todo al estado inicial
+                restablecerTodo();
+            } catch (SQLException e) {
+                PopUp.error("Error de conexion", "Ocurrio un error con la base de datos.");
+            }
         }
     }
 
@@ -377,6 +421,32 @@ public class NuevaVentaController implements Initializable {
             PopUp.informacion("Cantidad inválida", "Ingrese una cantidad mayor a 0 para añadir a las compras");
             return false;
         }
+    }
+
+    private void restablecerTodo() {
+        // Reinicia los cuadros de texto mostrados
+        dniCliente.setText("");
+        nombreCliente.setText("");
+        telefono.setText("");
+        email.setText("");
+        idProducto.setText("");
+        nombreProducto.setText("");
+        cantidad.getValueFactory().setValue(0);
+
+        // Borra la cache
+        clienteSeleccionado = null;
+        listaSubordenes.clear();
+        productosSeleccionados.clear();
+
+        // Limpia las tablas y resultado
+        productos.setItems(FXCollections.observableArrayList());
+        resultado.setItems(FXCollections.observableArrayList());
+        precio.setText("S/ 0.00");
+
+        // Deshabilita todo
+        deshabilitarBusqueda(true);
+        deshabilitarAnadir(true);
+        deshabilitarComprar(true);
     }
 
     private void deshabilitarBusqueda(boolean value) {

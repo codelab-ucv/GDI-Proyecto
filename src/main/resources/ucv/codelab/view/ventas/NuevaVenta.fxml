@@ -123,7 +123,7 @@
                   <Insets bottom="20.0" />
                </GridPane.margin>
             </Label>
-            <Button fx:id="comprar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Confirmar Compra" GridPane.columnIndex="4" GridPane.rowIndex="7">
+            <Button fx:id="comprar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#confirmarCompra" text="Confirmar Compra" GridPane.columnIndex="4" GridPane.rowIndex="7">
                <GridPane.margin>
                   <Insets bottom="20.0" right="20.0" />
                </GridPane.margin>
