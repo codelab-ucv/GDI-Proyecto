@@ -95,18 +95,18 @@
                   <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Spinner>
-            <Button fx:id="addProduct" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Añadir Producto" GridPane.rowIndex="6">
+            <Button fx:id="addProduct" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#seleccionarProducto" text="Añadir Producto" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                </GridPane.margin>
             </Button>
             <TableView fx:id="resultado" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="1" GridPane.rowSpan="6">
               <columns>
-                <TableColumn minWidth="-Infinity" prefWidth="110.0" text="ID" />
-                <TableColumn minWidth="-Infinity" prefWidth="550.0" text="Nombre del Producto" />
-                  <TableColumn minWidth="-Infinity" prefWidth="110.0" text="Precio Unitario" />
-                  <TableColumn minWidth="-Infinity" prefWidth="110.0" text="Cantidad" />
-                  <TableColumn minWidth="-Infinity" prefWidth="110.0" text="Monto a Pagar" />
+                <TableColumn fx:id="columnaId" minWidth="-Infinity" prefWidth="110.0" text="ID" />
+                <TableColumn fx:id="columnaNombre" minWidth="-Infinity" prefWidth="550.0" text="Nombre del Producto" />
+                  <TableColumn fx:id="columnaUnitario" minWidth="-Infinity" prefWidth="110.0" text="Precio Unitario" />
+                  <TableColumn fx:id="columnaCantidad" minWidth="-Infinity" prefWidth="110.0" text="Cantidad" />
+                  <TableColumn fx:id="columnaTotal" minWidth="-Infinity" prefWidth="110.0" text="Monto a Pagar" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />

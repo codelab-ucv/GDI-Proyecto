@@ -2,9 +2,12 @@ package ucv.codelab.controller.ventas;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,11 +18,14 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import ucv.codelab.model.Cliente;
 import ucv.codelab.model.Producto;
+import ucv.codelab.model.SubOrden;
 import ucv.codelab.repository.ClienteRepository;
 import ucv.codelab.repository.ProductoRepository;
 import ucv.codelab.util.PopUp;
@@ -60,14 +66,30 @@ public class NuevaVentaController implements Initializable {
     private ListView<Producto> productos;
 
     @FXML
-    private TableView resultado;
+    private TableView<SubOrden> resultado;
 
     @FXML
     private Label precio;
 
+    @FXML
+    private TableColumn<SubOrden, String> columnaId;
+
+    @FXML
+    private TableColumn<SubOrden, String> columnaNombre;
+
+    @FXML
+    private TableColumn<SubOrden, String> columnaUnitario;
+
+    @FXML
+    private TableColumn<SubOrden, Integer> columnaCantidad;
+
+    @FXML
+    private TableColumn<SubOrden, String> columnaTotal;
+
     private Cliente clienteSeleccionado;
-    @SuppressWarnings("unused")
-    private Producto productoSeleccionado;
+
+    private List<SubOrden> listaSubordenes = new ArrayList<>();
+    private List<Producto> productosSeleccionados = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -112,10 +134,14 @@ public class NuevaVentaController implements Initializable {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    setText(producto.getIdProducto() + ": " + producto.getNombreProducto());
+                    setText(producto.getIdProducto() + ": " + producto.getNombreProducto() + " - S/ "
+                            + producto.getPrecio());
                 }
             }
         });
+
+        // Configura las columnas del resultado
+        configurarColumnas();
     }
 
     @FXML
@@ -201,6 +227,113 @@ public class NuevaVentaController implements Initializable {
         }
     }
 
+    @FXML
+    private void seleccionarProducto() {
+        if (productos.getSelectionModel().getSelectedItem() == null) {
+            PopUp.informacion("Selecciona un producto", "Debes seleccionar un producto primero.");
+            return;
+        }
+
+        // Producto seleccionado
+        Producto p = productos.getSelectionModel().getSelectedItem();
+
+        // Busca el item en la lista de compras
+        int indexCarrito = enCarrito(p.getIdProducto());
+
+        // Si la cantidad es 0 y esta en la lista
+        if (cantidad.getValue() == 0 && indexCarrito != -1) {
+            // Quita el item del carrito
+            listaSubordenes.remove(indexCarrito);
+            // Quita el item de la cache
+            for (int i = 0; i < productosSeleccionados.size(); i++) {
+                // Si encuentra el item en la cache
+                if (productosSeleccionados.get(i).getIdProducto() == p.getIdProducto()) {
+                    // Borra el item y termina el bucle
+                    productosSeleccionados.remove(i);
+                    break;
+                }
+            }
+        }
+        // Si la cantidad no es 0 y esta en la lista
+        else if (cantidad.getValue() != 0 && indexCarrito != -1) {
+            // Crea una nueva suborden
+            SubOrden subOrdenAntigua = listaSubordenes.get(indexCarrito);
+            SubOrden subOrdenNueva = new SubOrden(
+                    subOrdenAntigua.getIdSubOrden(),
+                    subOrdenAntigua.getIdOrden(),
+                    subOrdenAntigua.getIdProducto(),
+                    cantidad.getValue());
+
+            // Reemplaza la suborden en la lista
+            listaSubordenes.set(indexCarrito, subOrdenNueva);
+        }
+        // Si la cantidad no es 0 y no esta en la lista
+        else if (cantidad.getValue() != 0 && indexCarrito == -1) {
+            // Añade el producto a la lista de productos seleccionados
+            productosSeleccionados.add(p);
+            // Añade la suborden a la lista
+            listaSubordenes.add(new SubOrden(-1, -1, p.getIdProducto(), cantidad.getValue()));
+        }
+        // Si la cantidad es 0 y no esta en la lista
+        else {
+            PopUp.informacion("Cantidad inválida", "Ingrese una cantidad mayor a 0 para añadir a las compras");
+            return;
+        }
+
+        // Actualiza la vista
+        ObservableList<SubOrden> datosObservables = FXCollections.observableArrayList(listaSubordenes);
+        resultado.setItems(datosObservables);
+    }
+
+    private void configurarColumnas() {
+        // Crear el formateador decimal para 2 decimales
+        DecimalFormat df = new DecimalFormat("#0.00");
+
+        // Columna ID
+        columnaId.setCellValueFactory(new PropertyValueFactory<>("idProducto"));
+
+        // Columna Nombre
+        columnaNombre.setCellValueFactory(cellData -> {
+            int idProducto = cellData.getValue().getIdProducto();
+            for (Producto producto : productosSeleccionados) {
+                if (producto.getIdProducto() == idProducto) {
+                    return new SimpleStringProperty(producto.getNombreProducto());
+                }
+            }
+            return new SimpleStringProperty("No encontrado");
+        });
+
+        // Columna Precio Unitario
+        columnaUnitario.setCellValueFactory(cellData -> {
+            int idProducto = cellData.getValue().getIdProducto();
+            for (Producto producto : productosSeleccionados) {
+                if (producto.getIdProducto() == idProducto) {
+                    String precioFormateado = df.format(producto.getPrecio());
+                    return new SimpleStringProperty(precioFormateado);
+                }
+            }
+            return new SimpleStringProperty(df.format(0.0));
+        });
+
+        // Columna Cantidad
+        columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
+
+        // Columna Total (precio unitario * cantidad)
+        columnaTotal.setCellValueFactory(cellData -> {
+            int idProducto = cellData.getValue().getIdProducto();
+            int cantidad = cellData.getValue().getCantidad();
+
+            for (Producto producto : productosSeleccionados) {
+                if (producto.getIdProducto() == idProducto) {
+                    double total = producto.getPrecio() * cantidad;
+                    String totalFormateado = df.format(total);
+                    return new SimpleStringProperty(totalFormateado);
+                }
+            }
+            return new SimpleStringProperty(df.format(0.0));
+        });
+    }
+
     private Cliente cargarCliente(Optional<Cliente> optionalCliente, ClienteRepository repository) {
         // Si se tiene el cliente en la base de datos lo usa
         if (optionalCliente.isPresent()) {
@@ -211,6 +344,18 @@ public class NuevaVentaController implements Initializable {
         // Si el usuario cancela la accion usa el cliente por defecto
         PopUp.informacion("Cliente cancelado", "Se canceló la creación del cliente, vuelve a intentarlo");
         return null;
+    }
+
+    private int enCarrito(int idProducto) {
+        for (int i = 0; i < listaSubordenes.size(); i++) {
+            // Si el ID del producto está en la lista de subOrdenes
+            if (listaSubordenes.get(i).getIdProducto() == idProducto) {
+                // Regresa el indice donde está el producto
+                return i;
+            }
+        }
+        // Si no está en el carrito retorna -1
+        return -1;
     }
 
     private void deshabilitarBusqueda(boolean value) {
