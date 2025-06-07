@@ -20,7 +20,8 @@ CREATE TABLE
         "nombre_cliente" TEXT NOT NULL,
         "dni_cliente" TEXT NOT NULL UNIQUE,
         "telefono" TEXT,
-        "email_cliente" TEXT
+        "email_cliente" TEXT,
+        UNIQUE ("dni_cliente")
     );
 
 CREATE TABLE
@@ -70,5 +71,10 @@ INSERT
 OR IGNORE INTO "empresa" ("nombre_empresa", "ruc")
 VALUES
     ("GDI", "20123456789");
+
+INSERT
+OR IGNORE INTO "cliente" ("nombre_cliente", "dni_cliente")
+VALUES
+    ("default", "00000000");
 
 COMMIT;

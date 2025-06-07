@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import ucv.codelab.model.Producto;
 import ucv.codelab.util.SQLiteConexion;
@@ -63,6 +64,17 @@ public class ProductoRepository extends BaseRepository<Producto> {
     protected void updateEntityWithGeneratedId(Producto producto, ResultSet generatedKeys) throws SQLException {
         int id = generatedKeys.getInt(1);
         producto.setIdProducto(id);
+    }
+
+    /**
+     * Busca productos vigentes por el ID
+     * 
+     * @param id ID del producto a buscar
+     * @return Optional que contiene el producto si existe, o vacío si no existe
+     */
+    public Optional<Producto> findByIdVigentes(int id) {
+        String sql = "SELECT * FROM producto WHERE id_producto = ? AND vigente = 1";
+        return executeQueryForSingleResult(sql, id);
     }
 
     /**
