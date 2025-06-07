@@ -360,7 +360,25 @@ public class NuevaVentaController implements Initializable {
             return optionalCliente.get();
         }
         // Si no lo tiene crea el cliente
-        // TODO consultar por un nombre y crear el cliente
+        else {
+            String nombre = PopUp.inputDialog("Cliente Nuevo", "Ingrese el nombre: ");
+            if (!nombre.equals("")) {
+                // Obtiene los datos opcionales
+                String telefono = PopUp.inputDialog("Cliente Nuevo", "Ingrese el teléfono (opcional): ");
+                String email = PopUp.inputDialog("Cliente Nuevo", "Ingrese el email (opcional): ");
+                if (telefono.trim().equals("")) {
+                    telefono = null;
+                }
+                if (email.trim().equals("")) {
+                    email = null;
+                }
+                // Crea el cliente nuevo y lo guarda en la base de datos
+                Cliente clienteNuevo = new Cliente(-1, nombre, dniCliente.getText(), telefono, email);
+                repository.save(clienteNuevo);
+
+                return clienteNuevo;
+            }
+        }
         // Si el usuario cancela la accion usa el cliente por defecto
         PopUp.informacion("Cliente cancelado", "Se canceló la creación del cliente, vuelve a intentarlo");
         return null;
