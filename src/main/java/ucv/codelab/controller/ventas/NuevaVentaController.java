@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -240,49 +242,23 @@ public class NuevaVentaController implements Initializable {
         // Busca el item en la lista de compras
         int indexCarrito = enCarrito(p.getIdProducto());
 
-        // Si la cantidad es 0 y esta en la lista
-        if (cantidad.getValue() == 0 && indexCarrito != -1) {
-            // Quita el item del carrito
-            listaSubordenes.remove(indexCarrito);
-            // Quita el item de la cache
-            for (int i = 0; i < productosSeleccionados.size(); i++) {
-                // Si encuentra el item en la cache
-                if (productosSeleccionados.get(i).getIdProducto() == p.getIdProducto()) {
-                    // Borra el item y termina el bucle
-                    productosSeleccionados.remove(i);
-                    break;
-                }
+        // Verifica si se realizan cambios
+        if (realizarCambios(p, indexCarrito)) {
+            // Actualiza la vista
+            ObservableList<SubOrden> datosObservables = FXCollections.observableArrayList(listaSubordenes);
+            resultado.setItems(datosObservables);
+
+            // Actualiza los datos mostrados
+            List<String> valores = resultado.getItems().stream().map(item -> columnaTotal.getCellData(item))
+                    .collect(Collectors.toList());
+
+            double total = 0;
+            for (String s : valores) {
+                total += Double.parseDouble(s);
             }
-        }
-        // Si la cantidad no es 0 y esta en la lista
-        else if (cantidad.getValue() != 0 && indexCarrito != -1) {
-            // Crea una nueva suborden
-            SubOrden subOrdenAntigua = listaSubordenes.get(indexCarrito);
-            SubOrden subOrdenNueva = new SubOrden(
-                    subOrdenAntigua.getIdSubOrden(),
-                    subOrdenAntigua.getIdOrden(),
-                    subOrdenAntigua.getIdProducto(),
-                    cantidad.getValue());
 
-            // Reemplaza la suborden en la lista
-            listaSubordenes.set(indexCarrito, subOrdenNueva);
+            precio.setText("S/ " + new DecimalFormat("#0.00").format(total));
         }
-        // Si la cantidad no es 0 y no esta en la lista
-        else if (cantidad.getValue() != 0 && indexCarrito == -1) {
-            // Añade el producto a la lista de productos seleccionados
-            productosSeleccionados.add(p);
-            // Añade la suborden a la lista
-            listaSubordenes.add(new SubOrden(-1, -1, p.getIdProducto(), cantidad.getValue()));
-        }
-        // Si la cantidad es 0 y no esta en la lista
-        else {
-            PopUp.informacion("Cantidad inválida", "Ingrese una cantidad mayor a 0 para añadir a las compras");
-            return;
-        }
-
-        // Actualiza la vista
-        ObservableList<SubOrden> datosObservables = FXCollections.observableArrayList(listaSubordenes);
-        resultado.setItems(datosObservables);
     }
 
     private void configurarColumnas() {
@@ -356,6 +332,51 @@ public class NuevaVentaController implements Initializable {
         }
         // Si no está en el carrito retorna -1
         return -1;
+    }
+
+    private boolean realizarCambios(Producto productoSeleccionado, int indexCarrito) {
+        // Si la cantidad es 0 y esta en la lista
+        if (cantidad.getValue() == 0 && indexCarrito != -1) {
+            // Quita el item del carrito
+            listaSubordenes.remove(indexCarrito);
+            // Quita el item de la cache
+            for (int i = 0; i < productosSeleccionados.size(); i++) {
+                // Si encuentra el item en la cache
+                if (productosSeleccionados.get(i).getIdProducto() == productoSeleccionado.getIdProducto()) {
+                    // Borra el item y termina el bucle
+                    productosSeleccionados.remove(i);
+                    break;
+                }
+            }
+            return true;
+        }
+        // Si la cantidad no es 0 y esta en la lista
+        else if (cantidad.getValue() != 0 && indexCarrito != -1) {
+            // Crea una nueva suborden
+            SubOrden subOrdenAntigua = listaSubordenes.get(indexCarrito);
+            SubOrden subOrdenNueva = new SubOrden(
+                    subOrdenAntigua.getIdSubOrden(),
+                    subOrdenAntigua.getIdOrden(),
+                    subOrdenAntigua.getIdProducto(),
+                    cantidad.getValue());
+
+            // Reemplaza la suborden en la lista
+            listaSubordenes.set(indexCarrito, subOrdenNueva);
+            return true;
+        }
+        // Si la cantidad no es 0 y no esta en la lista
+        else if (cantidad.getValue() != 0 && indexCarrito == -1) {
+            // Añade el producto a la lista de productos seleccionados
+            productosSeleccionados.add(productoSeleccionado);
+            // Añade la suborden a la lista
+            listaSubordenes.add(new SubOrden(-1, -1, productoSeleccionado.getIdProducto(), cantidad.getValue()));
+            return true;
+        }
+        // Si la cantidad es 0 y no esta en la lista
+        else {
+            PopUp.informacion("Cantidad inválida", "Ingrese una cantidad mayor a 0 para añadir a las compras");
+            return false;
+        }
     }
 
     private void deshabilitarBusqueda(boolean value) {
