@@ -59,6 +59,8 @@ public class GestionarTrabajadores extends GestionarBase<Trabajador> {
         // Es lo opuesto ya quee los campos funcionan como Editable y no como Disable
         nombre.setEditable(!value);
         dni.setEditable(!value);
+        // Se mantiene como deshabilitar
+        puesto.setDisable(value);
     }
 
     @Override
