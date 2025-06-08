@@ -13,6 +13,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import ucv.codelab.model.auxiliar.VentaInfo;
 import ucv.codelab.repository.OrdenRepository;
 import ucv.codelab.util.Personalizacion;
@@ -52,6 +53,25 @@ public class ConsultarVentasController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Configurar hacer Enter para buscar
+        idCompra.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                buscarVenta();
+            }
+        });
+
+        nombreCliente.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                buscarVenta();
+            }
+        });
+
+        nombreTrabajador.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                buscarVenta();
+            }
+        });
+
         configurarColumnas();
     }
 
