@@ -5,9 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import ucv.codelab.model.Orden;
+import ucv.codelab.model.auxiliar.VentaInfo;
 import ucv.codelab.util.SQLiteConexion;
 
 public class OrdenRepository extends BaseRepository<Orden> {
@@ -105,5 +107,86 @@ public class OrdenRepository extends BaseRepository<Orden> {
         return executeQuery(sql,
                 desde.format(DATE_FORMATTER),
                 hasta.format(DATE_FORMATTER));
+    }
+
+    /**
+     * Busca información de ventas con filtros dinámicos
+     * 
+     * @param idOrden    ID específico de orden (opcional)
+     * @param cliente    Nombre del cliente para filtrar (opcional)
+     * @param trabajador Nombre del trabajador para filtrar (opcional)
+     * @param fechaDesde Fecha de inicio del rango (opcional)
+     * @param fechaHasta Fecha de fin del rango (opcional)
+     * @param idEmpresa  ID de la empresa (requerido)
+     * @return Lista de información de ventas que coinciden con los filtros
+     * @throws SQLException si ocurre un error en la consulta
+     */
+    public List<VentaInfo> buscarVentas(Integer idOrden, String cliente, String trabajador,
+            LocalDate fechaDesde, LocalDate fechaHasta, int idEmpresa) throws SQLException {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT o.id_orden, c.nombre_cliente, t.nombre_trabajador, o.fecha_orden FROM orden o ");
+        sql.append("INNER JOIN cliente c ON o.id_cliente = c.id_cliente ");
+        sql.append("INNER JOIN trabajador t ON o.id_trabajador = t.id_trabajador ");
+        sql.append("WHERE o.id_empresa = ?");
+
+        List<Object> parametros = new ArrayList<>();
+        parametros.add(idEmpresa);
+
+        // Filtro por ID de orden (si se proporciona)
+        if (idOrden != null) {
+            sql.append(" AND o.id_orden = ?");
+            parametros.add(idOrden);
+        }
+
+        // Filtro por nombre de cliente
+        if (cliente != null && !cliente.trim().isEmpty()) {
+            sql.append(" AND c.nombre_cliente LIKE ?");
+            parametros.add("%" + cliente.trim() + "%");
+        }
+
+        // Filtro por nombre de trabajador
+        if (trabajador != null && !trabajador.trim().isEmpty()) {
+            sql.append(" AND t.nombre_trabajador LIKE ?");
+            parametros.add("%" + trabajador.trim() + "%");
+        }
+
+        // Filtros de fecha
+        if (fechaDesde != null) {
+            sql.append(" AND DATE(o.fecha_orden) >= ?");
+            parametros.add(fechaDesde.format(DATE_FORMATTER));
+        }
+
+        if (fechaHasta != null) {
+            sql.append(" AND DATE(o.fecha_orden) <= ?");
+            parametros.add(fechaHasta.format(DATE_FORMATTER));
+        }
+
+        sql.append(" ORDER BY o.fecha_orden DESC");
+
+        List<VentaInfo> ventas = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            // Asignar parámetros dinámicamente
+            for (int i = 0; i < parametros.size(); i++) {
+                Object param = parametros.get(i);
+                if (param instanceof Integer) {
+                    stmt.setInt(i + 1, (Integer) param);
+                } else if (param instanceof String) {
+                    stmt.setString(i + 1, (String) param);
+                }
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    VentaInfo venta = new VentaInfo(
+                            rs.getInt("id_orden"),
+                            rs.getString("nombre_cliente"),
+                            rs.getString("nombre_trabajador"),
+                            LocalDate.parse(rs.getString("fecha_orden"), DATE_FORMATTER));
+                    ventas.add(venta);
+                }
+            }
+        }
+        return ventas;
     }
 }
