@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import ucv.codelab.model.auxiliar.VentaInfo;
-import ucv.codelab.repository.OrdenRepository;
+import ucv.codelab.service.ConsultaAvanzadaSQL;
 import ucv.codelab.util.Personalizacion;
 import ucv.codelab.util.PopUp;
 
@@ -86,8 +86,7 @@ public class ConsultarVentasController implements Initializable {
             Integer id = (idCompra.getText() == null || idCompra.getText().trim().equals("")) ? null
                     : Integer.parseInt(idCompra.getText());
 
-            OrdenRepository ordenRepository = new OrdenRepository();
-            List<VentaInfo> registroVentas = ordenRepository.buscarVentas(id, nombreCliente.getText(),
+            List<VentaInfo> registroVentas = ConsultaAvanzadaSQL.buscarVentas(id, nombreCliente.getText(),
                     nombreTrabajador.getText(), fechaInicio.getValue(), fechaFin.getValue(),
                     Personalizacion.getEmpresaActual().getIdEmpresa());
             // Actualiza los resultados mostrados
