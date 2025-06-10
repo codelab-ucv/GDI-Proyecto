@@ -189,7 +189,7 @@ public abstract class BaseRepository<T> {
         String sql = "DELETE FROM " + getTableName() + " WHERE " + getIdColumnName() + " = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, (Integer) id);
+            stmt.setInt(1, id);
 
             stmt.executeUpdate();
         } catch (SQLException e) {

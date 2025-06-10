@@ -49,7 +49,7 @@ public class ProductoReader extends CsvReader<Producto> {
         String nombre = obtenerValor(fila, "nombre");
         String strPrecio = obtenerValor(fila, "precio");
 
-        double precio = -1;
+        double precio;
 
         // Validar campos obligatorios
         if (!sonCamposObligatoriosValidos(nombre, strPrecio)) {
