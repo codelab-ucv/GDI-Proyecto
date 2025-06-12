@@ -607,7 +607,7 @@ public class NuevaVentaController implements Initializable {
 
             double total = 0;
             for (String s : valores) {
-                total += Double.parseDouble(s);
+                total += Double.parseDouble(s.replaceAll(",", "."));
             }
 
             precio.setText("S/ " + new DecimalFormat("#0.00").format(total));
