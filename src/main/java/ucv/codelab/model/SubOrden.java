@@ -184,12 +184,4 @@ public class SubOrden {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-
-    public static Object[] cabecera() {
-        return new Object[] { "ID", "ID Orden", "ID Producto", "Cantidad" };
-    }
-
-    public Object[] registro() {
-        return new Object[] { idSubOrden, idOrden, idProducto, cantidad };
-    }
 }

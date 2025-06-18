@@ -5,7 +5,6 @@ import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 /**
@@ -221,11 +220,6 @@ public class PopUp {
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
-
-        // Hacer que el texto se ajuste y sea expandible
-        alert.getDialogPane().setContentText(content);
-        alert.getDialogPane().setPrefWidth(600); // Ancho base
-        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 
