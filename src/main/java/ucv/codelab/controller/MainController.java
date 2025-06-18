@@ -8,17 +8,44 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import ucv.codelab.Main;
+import ucv.codelab.model.Cliente;
+import ucv.codelab.model.Orden;
+import ucv.codelab.model.Producto;
+import ucv.codelab.model.SubOrden;
+import ucv.codelab.model.Trabajador;
+import ucv.codelab.repository.ClienteRepository;
+import ucv.codelab.repository.OrdenRepository;
+import ucv.codelab.repository.ProductoRepository;
+import ucv.codelab.repository.SubOrdenRepository;
+import ucv.codelab.repository.TrabajadorRepository;
 import ucv.codelab.util.Personalizacion;
 import ucv.codelab.util.PopUp;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Controlador principal para la gestión de la interfaz de usuario del menú
@@ -288,19 +315,302 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Ejecuta el proceso de respaldo de la base de datos del sistema.
+     * Ejecuta el proceso completo de exportación y respaldo de la base de datos del
+     * sistema.
      * 
      * <p>
-     * <strong>Nota:</strong> Esta funcionalidad está pendiente de implementación.
-     * Una vez completada, permitirá generar respaldos de la base de datos
-     * en ubicaciones específicas para garantizar la seguridad de la información.
+     * Genera un archivo Excel (.xlsx) completo con todos los datos del sistema
+     * organizados
+     * en hojas separadas. El usuario puede seleccionar la ubicación donde desea
+     * guardar
+     * el archivo de respaldo mediante un selector de directorios.
      * </p>
      * 
-     * @todo Implementar código para generar respaldo en la ubicación indicada
+     * <p>
+     * <strong>Funcionalidades del respaldo:</strong>
+     * </p>
+     * <ul>
+     * <li>Exportación completa de todas las tablas principales del sistema</li>
+     * <li>Generación de archivo Excel con formato profesional</li>
+     * <li>Selector de directorio con ubicación inicial en Documents</li>
+     * <li>Nombre de archivo único con timestamp para evitar sobrescrituras</li>
+     * <li>Manejo robusto de errores con mensajes informativos al usuario</li>
+     * </ul>
+     * 
+     * <p>
+     * <strong>Estructura del archivo generado:</strong>
+     * </p>
+     * <ul>
+     * <li><strong>Hoja "Clientes":</strong> Información completa de clientes
+     * registrados</li>
+     * <li><strong>Hoja "Trabajadores":</strong> Datos de empleados y usuarios del
+     * sistema</li>
+     * <li><strong>Hoja "Productos":</strong> Catálogo completo de productos con
+     * precios y stock</li>
+     * <li><strong>Hoja "Ordenes":</strong> Registro de todas las órdenes de
+     * venta</li>
+     * <li><strong>Hoja "Sub Ordenes":</strong> Detalles específicos de cada orden
+     * (items vendidos)</li>
+     * </ul>
+     * 
+     * <p>
+     * <strong>Formato del archivo:</strong>
+     * </p>
+     * <ul>
+     * <li>Nombre: {@code datos_exportados_[timestamp].xlsx}</li>
+     * <li>Ubicación: Directorio seleccionado por el usuario</li>
+     * <li>Formato: Microsoft Excel (.xlsx) compatible con versiones modernas</li>
+     * <li>Codificación: UTF-8 para caracteres especiales</li>
+     * </ul>
+     * 
+     * <p>
+     * <strong>Manejo de tipos de datos:</strong>
+     * </p>
+     * <ul>
+     * <li><strong>String:</strong> Texto plano sin modificaciones</li>
+     * <li><strong>Integer/Double:</strong> Valores numéricos con formato
+     * apropiado</li>
+     * <li><strong>LocalDate:</strong> Fechas convertidas a formato Excel con estilo
+     * dd/mm/yyyy</li>
+     * <li><strong>Boolean:</strong> Valores verdadero/falso</li>
+     * <li><strong>Null:</strong> Celdas vacías para campos sin datos</li>
+     * </ul>
+     * 
+     * <p>
+     * <strong>Proceso de exportación:</strong>
+     * </p>
+     * <ol>
+     * <li>Mostrar selector de directorio (inicializado en Documents)</li>
+     * <li>Crear nuevo libro de trabajo Excel</li>
+     * <li>Recuperar datos de cada repositorio de la base de datos</li>
+     * <li>Crear hojas separadas para cada tipo de entidad</li>
+     * <li>Llenar cada hoja con cabeceras y datos correspondientes</li>
+     * <li>Aplicar formato apropiado según el tipo de dato</li>
+     * <li>Guardar archivo en la ubicación seleccionada</li>
+     * <li>Mostrar confirmación de éxito o mensaje de error</li>
+     * </ol>
+     * 
+     * <p>
+     * <strong>Casos de error manejados:</strong>
+     * </p>
+     * <ul>
+     * <li><strong>IOException:</strong> Problemas de escritura o permisos de
+     * archivo</li>
+     * <li><strong>SQLException:</strong> Errores de conexión o consulta a la base
+     * de datos</li>
+     * <li><strong>Exception general:</strong> Cualquier otro error inesperado</li>
+     * <li><strong>Operación cancelada:</strong> Usuario cancela el selector de
+     * directorio</li>
+     * </ul>
      */
     @FXML
     private void mostrarRespaldos() {
-        // TODO Código para generar un respaldo en la ubicacion indicada
+        File directorioDestino = directyChooser();
+        if (directorioDestino == null) {
+            return;
+        }
+
+        // Definir el nombre del archivo y la ruta completa
+        String fileName = "datos_exportados_" + System.currentTimeMillis() + ".xlsx";
+        File ubicacionArchivo = new File(directorioDestino, fileName);
+
+        // Crear un nuevo libro de trabajo de Excel
+        try (Workbook workbook = new XSSFWorkbook();
+                FileOutputStream outputStream = new FileOutputStream(ubicacionArchivo)) {
+            // Llena las 5 hojas de datos
+
+            // 1. Hoja de Clientes
+            Sheet hojaCliente = workbook.createSheet("Clientes");
+            List<Cliente> listaClientes = new ClienteRepository().findAll();
+            List<Object[]> dataClientes = new ArrayList<>();
+            dataClientes.add(Cliente.cabecera());
+            for (Cliente c : listaClientes) {
+                dataClientes.add(c.registro());
+            }
+            llenarDatos(dataClientes, hojaCliente);
+
+            // 2. Hoja de Trabajadores
+            Sheet hojaTrabajador = workbook.createSheet("Trabajadores");
+            List<Trabajador> listaTrabajadores = new TrabajadorRepository().findAll();
+            List<Object[]> dataTrabajadores = new ArrayList<>();
+            dataTrabajadores.add(Trabajador.cabecera());
+            for (Trabajador t : listaTrabajadores) {
+                dataTrabajadores.add(t.registro());
+            }
+            llenarDatos(dataTrabajadores, hojaTrabajador);
+
+            // 3. Hoja de Productos
+            Sheet hojaProducto = workbook.createSheet("Productos");
+            List<Producto> listaProductos = new ProductoRepository().findAll();
+            List<Object[]> dataProductos = new ArrayList<>();
+            dataProductos.add(Producto.cabecera());
+            for (Producto p : listaProductos) {
+                dataProductos.add(p.registro());
+            }
+            llenarDatos(dataProductos, hojaProducto);
+
+            // 4. Hoja de Órdenes
+            Sheet hojaOrden = workbook.createSheet("Ordenes");
+            List<Orden> listaOrdenes = new OrdenRepository().findAll();
+            List<Object[]> dataOrdenes = new ArrayList<>();
+            dataOrdenes.add(Orden.cabecera());
+            for (Orden o : listaOrdenes) {
+                dataOrdenes.add(o.registro());
+            }
+            llenarDatos(dataOrdenes, hojaOrden);
+
+            // 5. Hoja de SubÓrdenes
+            Sheet hojaSubOrden = workbook.createSheet("Sub Ordenes");
+            List<SubOrden> listaSubOrdenes = new SubOrdenRepository().findAll();
+            List<Object[]> dataSubOrdenes = new ArrayList<>();
+            dataSubOrdenes.add(SubOrden.cabecera());
+            for (SubOrden so : listaSubOrdenes) {
+                dataSubOrdenes.add(so.registro());
+            }
+            llenarDatos(dataSubOrdenes, hojaSubOrden);
+
+            // Escribir el archivo en la ubicacion indicada
+            workbook.write(outputStream);
+            PopUp.informacion("Archivo exportado con exito", "Datos exportados en " + ubicacionArchivo);
+        } catch (IOException e) {
+            PopUp.error("Error al exportar archivo", "Intentelo denuevo o contacte a un administrador.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            PopUp.error("Error de conexion", "Ocurrio un error con la base de datos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getCause());
+        }
+    }
+
+    /**
+     * Muestra un selector de directorio para que el usuario elija dónde guardar el
+     * archivo de respaldo.
+     * 
+     * <p>
+     * Configura y muestra un {@link DirectoryChooser} con configuraciones
+     * predeterminadas
+     * para facilitar al usuario la selección del directorio de destino para el
+     * archivo
+     * de exportación. Se inicializa en el directorio "Documents" del usuario por
+     * conveniencia.
+     * </p>
+     * 
+     */
+    private File directyChooser() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Seleccionar carpeta para guardar el archivo Excel");
+
+        // Establece el directorio inicial en Documents
+        String userHome = System.getProperty("user.home");
+        File initialDirectory = new File(userHome, "Documents");
+        if (initialDirectory.exists()) {
+            directoryChooser.setInitialDirectory(initialDirectory);
+        }
+
+        // Mostrar el diálogo y obtener la carpeta seleccionada
+        File selectedDirectory = directoryChooser.showDialog(contenidoPrincipal.getScene().getWindow());
+
+        return selectedDirectory;
+    }
+
+    /**
+     * Llena una hoja de Excel con los datos proporcionados, aplicando formato
+     * apropiado según el tipo de dato.
+     * 
+     * <p>
+     * Método utilitario que procesa una lista de arrays de objetos y los convierte
+     * en filas y celdas
+     * de Excel, aplicando el formato y tipo de celda apropiado según el tipo de
+     * dato de cada campo.
+     * Maneja automáticamente la conversión de tipos de datos Java a tipos
+     * compatibles con Excel.
+     * </p>
+     * 
+     * <p>
+     * <strong>Tipos de datos soportados:</strong>
+     * </p>
+     * <ul>
+     * <li><strong>String:</strong> Se inserta como texto plano</li>
+     * <li><strong>Integer:</strong> Se inserta como valor numérico entero</li>
+     * <li><strong>Double:</strong> Se inserta como valor numérico decimal</li>
+     * <li><strong>LocalDate:</strong> Se convierte a Date y se aplica formato
+     * dd/mm/yyyy</li>
+     * <li><strong>Boolean:</strong> Se inserta como valor booleano</li>
+     * <li><strong>null:</strong> Se crea una celda vacía</li>
+     * <li><strong>Otros tipos:</strong> Se convierten a String usando
+     * toString()</li>
+     * </ul>
+     * 
+     * <p>
+     * <strong>Formato especial para fechas:</strong>
+     * </p>
+     * <p>
+     * Las fechas LocalDate se convierten automáticamente al tipo Date de Excel y se
+     * les
+     * aplica un estilo de celda con formato "dd/mm/yyyy" para una presentación
+     * consistente
+     * y legible en el archivo Excel resultante.
+     * </p>
+     * 
+     * <p>
+     * <strong>Estructura de datos esperada:</strong>
+     * </p>
+     * <p>
+     * Se espera que el primer elemento de la lista contenga las cabeceras de las
+     * columnas,
+     * y los elementos subsiguientes contengan los datos de cada fila. Cada array de
+     * objetos
+     * representa una fila, donde cada elemento del array corresponde a una celda.
+     * </p>
+     * 
+     * @param datos Lista de arrays de objetos donde cada array representa una fila
+     *              de datos.
+     *              El primer elemento debe contener las cabeceras de las columnas.
+     * @param hoja  Hoja de Excel donde se insertarán los datos. La hoja debe estar
+     *              previamente
+     *              creada y asociada a un Workbook válido.
+     */
+    private void llenarDatos(List<Object[]> datos, Sheet hoja) {
+        int rowNum = 0;
+        for (Object[] rowData : datos) {
+            Row row = hoja.createRow(rowNum++);
+            int colNum = 0;
+            for (Object field : rowData) {
+                Cell cell = row.createCell(colNum++);
+
+                if (field == null) {
+                    // Campo nulo: celda vacía
+                    cell.setBlank();
+                    continue;
+                }
+
+                // Manejo de diferentes tipos de datos
+                if (field instanceof String) {
+                    cell.setCellValue((String) field);
+                } else if (field instanceof Integer) {
+                    cell.setCellValue((Integer) field);
+                } else if (field instanceof Double) {
+                    cell.setCellValue((Double) field);
+                } else if (field instanceof LocalDate) {
+                    // Convertir LocalDate a Date para Excel
+                    LocalDate localDate = (LocalDate) field;
+                    Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                    cell.setCellValue(date);
+
+                    // Formato de fecha (opcional)
+                    CellStyle dateStyle = hoja.getWorkbook().createCellStyle();
+                    CreationHelper createHelper = hoja.getWorkbook().getCreationHelper();
+                    dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+                    cell.setCellStyle(dateStyle);
+                } else if (field instanceof Boolean) {
+                    cell.setCellValue((Boolean) field);
+                } else {
+                    // Para cualquier otro tipo, usar su representación como String
+                    cell.setCellValue(field.toString());
+                }
+            }
+        }
     }
 
     /**

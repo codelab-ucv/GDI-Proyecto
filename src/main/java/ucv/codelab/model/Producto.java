@@ -165,4 +165,12 @@ public class Producto {
     public void setVigente(boolean vigente) {
         this.vigente = vigente;
     }
+
+    public static Object[] cabecera() {
+        return new Object[] { "ID", "Nombre", "Precio", "Vigente" };
+    }
+
+    public Object[] registro() {
+        return new Object[] { idProducto, nombreProducto, precio, vigente };
+    }
 }

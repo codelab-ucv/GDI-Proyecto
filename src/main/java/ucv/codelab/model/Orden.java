@@ -231,4 +231,12 @@ public class Orden {
     public void setFechaOrden(LocalDate fechaOrden) {
         this.fechaOrden = fechaOrden;
     }
+
+    public static Object[] cabecera() {
+        return new Object[] { "ID", "ID Trabajador", "ID Cliente", "Fecha Orden" };
+    }
+
+    public Object[] registro() {
+        return new Object[] { idCliente, idTrabajador, idCliente, fechaOrden };
+    }
 }

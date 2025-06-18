@@ -188,4 +188,12 @@ public class Cliente {
     public void setEmailCliente(String emailCliente) {
         this.emailCliente = emailCliente;
     }
+
+    public static Object[] cabecera() {
+        return new Object[] { "ID", "Nombre", "Telefono", "Email" };
+    }
+
+    public Object[] registro() {
+        return new Object[] { idCliente, nombreCliente, telefono, emailCliente };
+    }
 }
