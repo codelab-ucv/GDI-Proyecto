@@ -267,4 +267,12 @@ public class Trabajador {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public static Object[] cabecera() {
+        return new Object[] { "ID", "Nombre", "DNI", "Puesto", "Tipo Letra", "Color Fondo" };
+    }
+
+    public Object[] registro() {
+        return new Object[] { idTrabajador, nombreTrabajador, dniTrabajador, puesto, tipoLetra, colorFondo };
+    }
 }
