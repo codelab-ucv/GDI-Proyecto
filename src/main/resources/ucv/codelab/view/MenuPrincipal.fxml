@@ -17,7 +17,7 @@
                   <MenuItem fx:id="menuConsultarVentas" mnemonicParsing="false" onAction="#mostrarConsultarVentas" text="Consultar Ventas" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Importar">
+            <Menu fx:id="menuImportar" mnemonicParsing="false" text="Importar">
                <items>
                   <MenuItem fx:id="menuImportarProductos" mnemonicParsing="false" onAction="#mostrarImportarProductos" text="Productos" />
                   <MenuItem fx:id="menuImportarUsuarios" mnemonicParsing="false" onAction="#mostrarImportarUsuarios" text="Usuarios" />
@@ -25,7 +25,7 @@
                   <MenuItem fx:id="menuImportarClientes" mnemonicParsing="false" onAction="#mostrarImportarClientes" text="Clientes" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Estadísticas">
+            <Menu fx:id="menuEstadisticas" mnemonicParsing="false" text="Estadísticas">
                <items>
                   <MenuItem fx:id="menuProductosMasVendidos" mnemonicParsing="false" onAction="#mostrarProductosMasVendidos" text="Productos Más Vendidos" />
                </items>
@@ -34,7 +34,7 @@
                <items>
                   <MenuItem fx:id="menuPersonalizar" mnemonicParsing="false" onAction="#mostrarPersonalizarInterfaz" text="Personalizar Interfaz" />
                   <MenuItem fx:id="menuDatosEmpresa" mnemonicParsing="false" onAction="#mostrarDatosEmpresa" text="Datos de la Empresa" />
-                  <SeparatorMenuItem />
+                  <SeparatorMenuItem fx:id="menuSeparador1" />
                   <MenuItem fx:id="menuGestionUsuarios" mnemonicParsing="false" onAction="#mostrarGestionUsuarios" text="Gestión de Usuarios" />
                   <MenuItem fx:id="menuRespaldos" mnemonicParsing="false" onAction="#mostrarRespaldos" text="Respaldos" />
                   <SeparatorMenuItem />

@@ -1,29 +1,5 @@
 package ucv.codelab.controller;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
-import ucv.codelab.Main;
-import ucv.codelab.model.Cliente;
-import ucv.codelab.model.Orden;
-import ucv.codelab.model.Producto;
-import ucv.codelab.model.SubOrden;
-import ucv.codelab.model.Trabajador;
-import ucv.codelab.repository.ClienteRepository;
-import ucv.codelab.repository.OrdenRepository;
-import ucv.codelab.repository.ProductoRepository;
-import ucv.codelab.repository.SubOrdenRepository;
-import ucv.codelab.repository.TrabajadorRepository;
-import ucv.codelab.util.Personalizacion;
-import ucv.codelab.util.PopUp;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,6 +22,33 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import ucv.codelab.Main;
+import ucv.codelab.model.Cliente;
+import ucv.codelab.model.Orden;
+import ucv.codelab.model.Producto;
+import ucv.codelab.model.SubOrden;
+import ucv.codelab.model.Trabajador;
+import ucv.codelab.repository.ClienteRepository;
+import ucv.codelab.repository.OrdenRepository;
+import ucv.codelab.repository.ProductoRepository;
+import ucv.codelab.repository.SubOrdenRepository;
+import ucv.codelab.repository.TrabajadorRepository;
+import ucv.codelab.util.Personalizacion;
+import ucv.codelab.util.PopUp;
 
 /**
  * Controlador principal para la gestión de la interfaz de usuario del menú
@@ -178,6 +181,49 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // Mostrar vista de crear nueva venta al iniciar
         cargarVista("ventas/NuevaVenta.fxml", "nueva-venta", "Nueva Venta");
+        switch (Personalizacion.getTrabajadorActual().getPuesto()) {
+            case "TRABAJADOR":
+                habilitarMenusSupervisor(false);
+            case "SUPERVISOR":
+                habilitarMenusJefe(false);
+            case "JEFE":
+                break;
+        }
+    }
+
+    @FXML
+    private Menu menuImportar;
+
+    @FXML
+    private Menu menuEstadisticas;
+
+    @FXML
+    private MenuItem menuImportarUsuarios;
+
+    @FXML
+    private MenuItem menuDatosEmpresa;
+
+    @FXML
+    private MenuItem menuGestionUsuarios;
+
+    @FXML
+    private MenuItem menuRespaldos;
+
+    @FXML
+    private SeparatorMenuItem menuSeparador1;
+
+    private void habilitarMenusSupervisor(boolean valor) {
+        menuImportar.setVisible(valor);
+        menuEstadisticas.setVisible(valor);
+    }
+
+    private void habilitarMenusJefe(boolean valor) {
+        // La importacion de nuevos usuarios solo la maneja el jefe
+        menuImportarUsuarios.setVisible(valor);
+        menuDatosEmpresa.setVisible(valor);
+        menuGestionUsuarios.setVisible(valor);
+        menuRespaldos.setVisible(valor);
+        menuSeparador1.setVisible(valor);
     }
 
     // ============== MÉTODOS PARA MENÚ VENTAS ==============
