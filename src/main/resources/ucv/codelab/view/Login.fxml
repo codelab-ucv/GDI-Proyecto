@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox alignment="TOP_CENTER" prefHeight="560.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.LoginController">
+<VBox alignment="TOP_CENTER" prefHeight="560.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21.0.7" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucv.codelab.controller.LoginController">
    <children>
       <Label fx:id="titulo" alignment="TOP_LEFT" text="GDI" underline="true">
          <font>
