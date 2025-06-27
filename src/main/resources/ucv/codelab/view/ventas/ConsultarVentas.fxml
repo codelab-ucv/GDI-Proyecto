@@ -69,7 +69,7 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                </GridPane.margin>
             </Button>
-            <TableView fx:id="resultado" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <TableView fx:id="resultado" onMouseClicked="#clicVenta" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <columns>
                   <TableColumn fx:id="columnaId" minWidth="100.0" prefWidth="100.0" text="ID" />
                   <TableColumn fx:id="columnaCliente" minWidth="400.0" prefWidth="400.0" text="Cliente" />

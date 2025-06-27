@@ -14,6 +14,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import ucv.codelab.model.auxiliar.VentaInfo;
 import ucv.codelab.service.ConsultaAvanzadaSQL;
 import ucv.codelab.util.Personalizacion;
@@ -294,6 +296,21 @@ public class ConsultarVentasController implements Initializable {
             PopUp.error("Filtros incorrectos", "El ID debe ser un número válido");
         } catch (SQLException e) {
             PopUp.error("Error de conexion", "Ocurrio un error con la base de datos.");
+        }
+    }
+
+    @FXML
+    private void clicVenta(MouseEvent event) {
+        // Verificar que sea doble clic con el botón primario
+        if (event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
+            // Obtener el elemento seleccionado
+            VentaInfo ventaSeleccionada = resultado.getSelectionModel().getSelectedItem();
+
+            if (ventaSeleccionada != null) {
+                // TODO mostrar panel para brindar PDF
+                PopUp.confirmacion("Confirmacion", "Imprimir PDF",
+                        "¿Desea imprimir el pdf de la orden " + ventaSeleccionada.getIdOrden() + "?");
+            }
         }
     }
 
