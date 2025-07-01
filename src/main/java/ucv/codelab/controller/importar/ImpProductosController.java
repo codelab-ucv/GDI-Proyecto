@@ -9,7 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ucv.codelab.model.Producto;
 import ucv.codelab.repository.BaseRepository;
 import ucv.codelab.repository.ProductoRepository;
-import ucv.codelab.service.io.ProductoReader;
+import ucv.codelab.service.reader.ProductoReader;
 
 /**
  * Controlador para la importación de productos desde archivos CSV.
