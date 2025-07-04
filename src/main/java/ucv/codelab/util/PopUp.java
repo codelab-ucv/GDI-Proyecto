@@ -224,7 +224,7 @@ public class PopUp {
 
         // Hacer que el texto se ajuste y sea expandible
         alert.getDialogPane().setContentText(content);
-        alert.getDialogPane().setPrefWidth(600); // Ancho base
+        alert.getDialogPane().setPrefWidth(300); // Ancho base
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();

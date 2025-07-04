@@ -1,21 +1,29 @@
 package ucv.codelab.controller.ventas;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.DirectoryChooser;
 import ucv.codelab.model.auxiliar.VentaInfo;
 import ucv.codelab.service.ConsultaAvanzadaSQL;
+import ucv.codelab.service.writer.MakePdf;
 import ucv.codelab.util.Personalizacion;
 import ucv.codelab.util.PopUp;
 
@@ -295,6 +303,57 @@ public class ConsultarVentasController implements Initializable {
         } catch (SQLException e) {
             PopUp.error("Error de conexion", "Ocurrio un error con la base de datos.");
         }
+    }
+
+    @FXML
+    private void clicVenta(MouseEvent event) {
+        // Verificar que sea doble clic con el botón primario
+        if (event.getClickCount() == 2 && event.getButton() == MouseButton.PRIMARY) {
+            // Obtener el elemento seleccionado
+            VentaInfo ventaSeleccionada = resultado.getSelectionModel().getSelectedItem();
+
+            if (ventaSeleccionada == null) {
+                return;
+            }
+
+            Optional<ButtonType> resultado = PopUp.confirmacion("Confirmacion", "Imprimir PDF",
+                    "¿Desea imprimir el pdf de la orden " + ventaSeleccionada.getIdOrden() + "?");
+
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                File directorioDestino = directoryChooser();
+                if (directorioDestino == null) {
+                    PopUp.error("Sin directorio", "Guardado de PDF cancelado");
+                    return;
+                }
+
+                String fileName = "boleta_" + ventaSeleccionada.getIdOrden() + ".pdf";
+                File ubicacionArchivo = new File(directorioDestino, fileName);
+
+                try {
+                    MakePdf.make(ubicacionArchivo, ventaSeleccionada.getIdOrden());
+                } catch (IOException e) {
+                    PopUp.error("Error al guardar", "Error al guardar el PDF");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private File directoryChooser() {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Seleccionar carpeta para guardar el archivo Excel");
+
+        // Establece el directorio inicial en Documents
+        String userHome = System.getProperty("user.home");
+        File initialDirectory = new File(userHome, "Documents");
+        if (initialDirectory.exists()) {
+            directoryChooser.setInitialDirectory(initialDirectory);
+        }
+
+        // Mostrar el diálogo y obtener la carpeta seleccionada
+        File selectedDirectory = directoryChooser.showDialog(idCompra.getScene().getWindow());
+
+        return selectedDirectory;
     }
 
     /**

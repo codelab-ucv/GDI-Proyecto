@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ucv.codelab.model.Trabajador;
 import ucv.codelab.repository.BaseRepository;
 import ucv.codelab.repository.TrabajadorRepository;
-import ucv.codelab.service.io.TrabajadorReader;
+import ucv.codelab.service.reader.TrabajadorReader;
 
 /**
  * Controlador para la importación de trabajadores desde archivos CSV.

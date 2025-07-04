@@ -451,7 +451,7 @@ public class MainController implements Initializable {
      */
     @FXML
     private void mostrarRespaldos() {
-        File directorioDestino = directyChooser();
+        File directorioDestino = directoryChooser();
         if (directorioDestino == null) {
             return;
         }
@@ -543,7 +543,7 @@ public class MainController implements Initializable {
      * </p>
      * 
      */
-    private File directyChooser() {
+    private File directoryChooser() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Seleccionar carpeta para guardar el archivo Excel");
 

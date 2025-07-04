@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ucv.codelab.model.Cliente;
 import ucv.codelab.repository.BaseRepository;
 import ucv.codelab.repository.ClienteRepository;
-import ucv.codelab.service.io.ClienteReader;
+import ucv.codelab.service.reader.ClienteReader;
 
 /**
  * Controlador para la importación de clientes desde archivos CSV.
