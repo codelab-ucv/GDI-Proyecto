@@ -117,7 +117,8 @@ public class MakePdf {
         Cell rightCell = new Cell()
                 .setBorder(Border.NO_BORDER)
                 .setTextAlignment(TextAlignment.RIGHT)
-                .setVerticalAlignment(VerticalAlignment.MIDDLE).setHorizontalAlignment(HorizontalAlignment.RIGHT);
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setHorizontalAlignment(HorizontalAlignment.RIGHT);
 
         try {
             // Obtener el logo desde Personalizacion (JavaFX Image)
@@ -135,11 +136,17 @@ public class MakePdf {
                 // Crear iText Image
                 Image logo = new Image(ImageDataFactory.create(imageBytes));
 
-                // Ajustar tamaño del logo (opcional)
+                // Ajustar tamaño del logo
                 logo.setWidth(80);
                 logo.setHeight(60);
 
-                rightCell.add(logo);
+                // Crear un párrafo contenedor para alinear la imagen a la derecha
+                Paragraph logoParagraph = new Paragraph()
+                        .add(logo)
+                        .setTextAlignment(TextAlignment.RIGHT)
+                        .setMargin(0);
+
+                rightCell.add(logoParagraph);
             } else {
                 // Si no hay logo, usar emoji como fallback
                 rightCell.add(new Paragraph("🛒").setFontSize(40));
